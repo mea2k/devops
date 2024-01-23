@@ -32,4 +32,4 @@
 
 
 # Задание
-(https://github.com/netology-code/virtd-homeworks/tree/shvirtd-1/05-virt-01-basics)[https://github.com/netology-code/virtd-homeworks/tree/shvirtd-1/05-virt-01-basics]
+[https://github.com/netology-code/virtd-homeworks/tree/shvirtd-1/05-virt-01-basics](https://github.com/netology-code/virtd-homeworks/tree/shvirtd-1/05-virt-01-basics)
