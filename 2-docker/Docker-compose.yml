@@ -1,6 +1,6 @@
 version: "3.7"
 include:
-  - my-compose.yaml  
+  - my-compose.yml  
 services:
   registry:
     image: registry:2
