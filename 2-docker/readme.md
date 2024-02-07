@@ -98,8 +98,10 @@ docker run -d --rm -p 8080:80  --name nginx makevg/my_nginx:1.0.0
 
 ## Задача 5 - использование docker compose
 [Docker-compose.yml](Docker-compose.yml)
+
 [my-compose.yml](my-compose.yml)
-В этом задании не получается сбросить пароль контейнеру Portainer.
+
+_В этом задании не получается сбросить пароль контейнеру Portainer._
 
 
 # Задание
