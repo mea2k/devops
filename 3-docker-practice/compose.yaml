@@ -1,0 +1,54 @@
+version: '3.8'
+
+include:
+  - proxy.yaml  # reverse-proxy + ingress-proxy
+
+services:
+  web:
+    #image: makevg/web-logger
+    image: web_logger
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.python
+    env_file: .env
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      backend:
+        ipv4_address: 172.20.0.5
+
+
+  mysql:
+    image: mysql:8
+    restart: always
+    hostname: ${DB_HOST}
+    env_file: .env
+    ports:
+      - 3306:3306
+    volumes:
+      - /var/mysql/data:/var/lib/mysql:rw
+    command: --mysql-native-password=ON
+    healthcheck:
+      #test: out=$$(mysqladmin ping -hlocalhost -P3306 -uroot -p$${MYSQL_ROOT_PASSWORD} 2>&1); echo $$out | grep 'mysqld is alive' || { echo $$out; exit 1; }
+      test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD' ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      backend:
+        ipv4_address: 172.20.0.10
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 9000:8080
+
+
+volumes:
+  mysql_data:
+    driver: local

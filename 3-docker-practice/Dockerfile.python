@@ -1,0 +1,21 @@
+FROM python:3.9-slim as builder
+WORKDIR /var/www/app
+RUN python -m venv ./venv
+ENV PATH="/var/www/app/venv/bin:$PATH"
+RUN chmod +x ./venv/bin/activate
+RUN ./venv/bin/activate
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip -r requirements.txt
+
+
+FROM python:3.9-alpine as worker
+WORKDIR /var/www/app
+RUN addgroup --system python && \
+    adduser --system --disabled-password  --ingroup python python && chown python:python /var/www/app
+USER python
+COPY --chown=python:python --from=builder /var/www/app/venv ./venv
+COPY --chown=python:python . .
+ENV PATH="/var/www/app/venv/bin:$PATH"
+
+ENTRYPOINT ["python", "main.py"]
+#CMD ["python", "main.py"]
