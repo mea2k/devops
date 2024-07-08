@@ -29,11 +29,12 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - /var/mysql/data:/var/lib/mysql:rw
+      #- /var/mysql/data:/var/lib/mysql:rw
+      - mysql_data:/var/lib/mysql:rw
     command: --mysql-native-password=ON
     healthcheck:
       #test: out=$$(mysqladmin ping -hlocalhost -P3306 -uroot -p$${MYSQL_ROOT_PASSWORD} 2>&1); echo $$out | grep 'mysqld is alive' || { echo $$out; exit 1; }
-      test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD' ]
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD' ]
       interval: 5s
       timeout: 5s
       retries: 5
