@@ -30,7 +30,8 @@ services:
       - 3306:3306
     volumes:
       #- /var/mysql/data:/var/lib/mysql:rw
-      - /opt/mysql_data:/var/lib/mysql:rw
+      - /opt/mysql/data:/var/lib/mysql:rw
+      - /opt/mysql/tmp:/tmp:rw
     command: --mysql-native-password=ON
       --intialize-insecure
     healthcheck:
