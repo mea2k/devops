@@ -26,7 +26,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.mysql
-      
+
     restart: always
     hostname: ${DB_HOST}
     env_file: .env
@@ -37,7 +37,7 @@ services:
       - /opt/mysql/data:/var/lib/mysql:rw
       - /opt/mysql/tmp:/tmp:rw
     command: --mysql-native-password=ON
-      --intialize-insecure
+      --initialize-insecure
     healthcheck:
       #test: out=$$(mysqladmin ping -hlocalhost -P3306 -uroot -p$${MYSQL_ROOT_PASSWORD} 2>&1); echo $$out | grep 'mysqld is alive' || { echo $$out; exit 1; }
       test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD' ]
