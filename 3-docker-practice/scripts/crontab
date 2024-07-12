@@ -1,2 +1,2 @@
-#minute hour    day     month   week    command
-*/1       *       *       *       *       /usr/local/bin/backup.sh
+#minute hour    day     month   week    user       command
+*/2       *       *       *       *       root       /usr/local/bin/backup
