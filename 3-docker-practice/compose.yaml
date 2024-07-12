@@ -68,11 +68,10 @@ services:
       - ./scripts/backup.sh:/usr/local/bin/backup
       - /opt/mysql/backup:/backup
     command: ["-l", "8", "-d", "8"]
-    environment:
-      MYSQL_HOST: db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: database
+    networks:
+      backend:
+        ipv4_address: 172.20.0.10
+
 
 
 
