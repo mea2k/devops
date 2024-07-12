@@ -1,4 +1,4 @@
 #minute hour    day     month   week    command
-*/2       *       *       *       *       /usr/local/bin/backup
-*         *       *       *       *       echo "`date +"%Y-%m-%d %T"` ${MYSQL_DATABASE}" > /backup/test
-*/2       *       *       *       *       echo "`date +"%Y-%m-%d %T"` ${MYSQL_DATABASE}" > /backup/test2
+*/2 * * * * /usr/local/bin/backup
+* * * * * echo "`date +"%Y-%m-%d %T"` ${MYSQL_DATABASE}" > /backup/test
+*/2 * * * * echo "`date +"%Y-%m-%d %T"` ${MYSQL_DATABASE}" > /backup/test2
