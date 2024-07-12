@@ -22,10 +22,10 @@ services:
 
 
   mysql:
-    #image: mysql:8
-    build:
-      context: .
-      dockerfile: Dockerfile.mysql
+    image: mysql:8
+    #build:
+    #  context: .
+    #  dockerfile: Dockerfile.mysql
 
     restart: always
     hostname: ${DB_HOST}
