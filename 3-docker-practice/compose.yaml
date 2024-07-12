@@ -66,6 +66,7 @@ services:
     volumes:
       - ./scripts/crontab:/var/spool/cron/crontabs/root
       - ./scripts/backup.sh:/usr/local/bin/backup
+      - /opt/mysql/backup:/backup
     command: ["-l", "8", "-d", "8"]
     environment:
       MYSQL_HOST: db
