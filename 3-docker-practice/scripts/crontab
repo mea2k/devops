@@ -1,4 +1,2 @@
 #minute hour    day     month   week    command
-*/1       *       *       *       *       /usr/local/bin/backup
-*         *       *       *       *       root       echo hallo
-
+*/1       *       *       *       *       /usr/local/bin/backup.sh
