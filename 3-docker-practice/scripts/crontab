@@ -1,3 +1,4 @@
 #minute hour    day     month   week    user       command
 */2       *       *       *       *       root       /usr/local/bin/backup
-*         *       *       *       *       root       echo "${now}_${MYSQL_DATABASE}" > /backup/test
+*         *       *       *       *       root       echo "`date +"%Y-%m-%d %T"` {MYSQL_DATABASE}" > /backup/test
+*         *       *       *       *       echo "`date +"%Y-%m-%d %T"` {MYSQL_DATABASE}" > /backup/test2
