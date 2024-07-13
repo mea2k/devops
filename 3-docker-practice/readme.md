@@ -27,6 +27,7 @@ Docker Compose version v2.28.1
 - cron-backup (`schnitzler/mysqldump`, запуск 1 раз в минуту)
 
 Схема стенда на рисунке ниже.
+
 ![Схема стенда](images/%D1%81%D1%85%D0%B5%D0%BC%D0%B0_%D1%81%D1%82%D0%B5%D0%BD%D0%B4%D0%B0.png)
 
 
@@ -69,6 +70,7 @@ SELECT * from logs LIMIT 10;
 ```
 
 Результаты:
+
 ![Результаты выполнения SQL-команд](images/sql-check.png)
 
 
@@ -101,7 +103,8 @@ docker run --rm --entrypoint "" -v /opt/mysql/backup:/backup --network backend -
 - `/opt/mysql/temp` - временные файлы СУБД 
 - `/opt/mysql/backup` - бэкапы БД
 
-Скриншот с созданными бэкапами
+Результаты создания бэкапов
+
 ![Содержимое папки /backup](images/backup-files.png)
 
 ![Журнал работы cron](images/backup-logs.png)
@@ -110,6 +113,7 @@ docker run --rm --entrypoint "" -v /opt/mysql/backup:/backup --network backend -
 ## Задача 6  - Terraform
 
 ### Задание
+
 Скачайте docker образ hashicorp/terraform:latest и скопируйте бинарный файл /bin/terraform на свою локальную машину, используя dive и docker save. Предоставьте скриншоты действий .
 
 Задача 6.1
@@ -124,6 +128,7 @@ docker run --rm --entrypoint "" -v /opt/mysql/backup:/backup --network backend -
 ## Задача 7  - runc
 
 ### Задание
+
 Запустите ваше python-приложение с помощью runC, не используя docker или containerd.
 Предоставьте скриншоты действий .
 
