@@ -66,13 +66,12 @@ services:
     volumes:
       - ./scripts/crontab:/var/spool/cron/crontabs/root
       - ./scripts/backup.sh:/usr/local/bin/backup
+      #- ./scripts/backup.sh:/etc/periodic/15min/backup
       - /opt/mysql/backup:/backup:rw
-    command: ["-l", "8", "-d", "8"]
+    command: ["-l", "0", "-d", "8", "-L", "/var/log/cron.log"]
     networks:
       backend:
         ipv4_address: 172.20.0.20
-
-
 
 
 volumes:

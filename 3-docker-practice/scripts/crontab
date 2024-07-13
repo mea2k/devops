@@ -4,6 +4,4 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 #End borrowed from anacron
 
 #minute hour    day     month   week    command
-*/2       *       *       *       *       /bin/sh /usr/local/bin/backup
-*         *       *       *       *       echo "`date +"%Y-%m-%d %T"` ${MYSQL_DATABASE}" > /backup/test
-*/2       *       *       *       *       echo "`date +"%Y-%m-%d %T"` ${MYSQL_DATABASE}" > /backup/test2
+*/1       *       *       *       *       /bin/sh /usr/local/bin/backup 2>&1
