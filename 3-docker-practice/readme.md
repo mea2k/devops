@@ -103,6 +103,14 @@ docker run --rm --entrypoint "" -v /opt/mysql/backup:/backup --network backend -
 - `/opt/mysql/temp` - временные файлы СУБД 
 - `/opt/mysql/backup` - бэкапы БД
 
+Прежде чем запустить контейнеры необходимо дать правильные права доступа и указать владельцев файлов:
+```
+chown 0:0 ./scripts/backup.sh
+chmod 700 ./scripts/backup.sh
+chown 0:0 ./scripts/crontab
+chmod 600 ./scripts/crontab
+```
+
 Результаты создания бэкапов
 
 ![Содержимое папки /backup](images/backup-files.png)
@@ -112,17 +120,57 @@ docker run --rm --entrypoint "" -v /opt/mysql/backup:/backup --network backend -
 
 ## Задача 6  - Terraform
 
-### Задание
+### 6.1 - Использование инструментов (dive)
 
-Скачайте docker образ hashicorp/terraform:latest и скопируйте бинарный файл /bin/terraform на свою локальную машину, используя dive и docker save. Предоставьте скриншоты действий .
+1. Скачивание образа:
+```
+docker pull hashicorp/terraform:latest
+```
 
-Задача 6.1
-Добейтесь аналогичного результата, используя docker cp.
-Предоставьте скриншоты действий .
+2. Сохранение образа на локальную машину:
+```
+docker save hashicorp/terraform:latest > terraform.tar
+```
 
-Задача 6.2 (**)
-Предложите способ извлечь файл из контейнера, используя только команду docker build и любой Dockerfile.
-Предоставьте скриншоты действий .
+3. Исследование образа с помощью утилиты dive (_портебовалось преобразовать образ с помощью skopeo, так как с какой-то версии он не поддерживается утилитой_):
+```
+skopeo --insecure-policy copy docker-archive:terraform.tar docker-archive:terraform_skopeo.tar
+dive --source docker-archive terraform_skopeo.tar
+```
+
+4. Поиск слоя, копирующего файл /bin/terraform (запоминаем его ID)
+
+![слой с файлом /bin/terraform](images/terraform-dive.png)
+
+5. В папке архива образа `blobs/sha256` берем файл с найденным в п.4 ID, распаковываем его, и оттуда копируем файл `terraform`.
+
+![содержимое слоя с terraform](images/terraform-bin.png)
+
+
+### 6.2, 6.3 - Использование только docker
+
+1. Создание [Dockerfile.terraform](Dockerfile.terraform), в котором на основе образа hashicorp/terraform:latest создается папка `/opt/terraform/bin`, в которую копируется файл `/bin/terraform`
+
+2. Создание своего контейнера - `terrabash`, в котором уже имеется файл `/opt/terraform/bin/terraform`, а также есть `bash`.
+```
+docker build -f Dockerfile.terraform -t terrabash .
+```
+
+3. Запуск контейнера `terrabash` и проброс локальной временной папки внутрь контейнера.
+```
+docker run -it --rm -v /home/admin/temp:/tmp terrabash
+```
+
+4. Копирование файла внутри контейнера terrabash:
+```
+cp /opt/terraform/bin/terraform /tmp
+```
+
+5. Завершение работы контейнера (`exit`) и работа с файлом `/home/admin/temp/terraform`!
+
+
+
+
 
 
 ## Задача 7  - runc

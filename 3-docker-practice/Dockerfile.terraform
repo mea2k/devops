@@ -1,0 +1,12 @@
+FROM hashicorp/terraform:latest AS base
+WORKDIR /bin
+RUN mkdir /opt/terraform
+RUN mkdir /opt/terraform/bin
+RUN cp /bin/terraform /opt/terraform/bin
+
+
+FROM alpine:3.20 AS main
+WORKDIR /opt/terraform/bin
+COPY --from=base /opt/terraform/bin .
+
+ENTRYPOINT ["/bin/sh"]
