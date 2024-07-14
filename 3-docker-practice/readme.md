@@ -1,6 +1,6 @@
 # Практическое применение Docker
 
-## Задача 0 --- версии программ
+## Задача 0 - версии программ
 Версии установленных программ:
 docker:
 ```
@@ -14,7 +14,7 @@ $ docker compose version
 Docker Compose version v2.28.1
 ```
 
-## Задача 1 --- web-logger
+## Задача 1 - web-logger
 
 Репозиторий проекта : [https://github.com/mea2k/devops/tree/main/3-docker-practice](https://github.com/mea2k/devops/tree/main/3-docker-practice)
 
@@ -46,7 +46,7 @@ Docker Compose version v2.28.1
 - `APP_PORT` - порт, на котором будет запускаться приложение
 
 
-## Задача 2  --- Yandex.Cloud
+## Задача 2  - Yandex.Cloud
 
 Создан репозиторий в Yandex.Cloud. Туда и на открытый репозиторий размещен образ контейнера web-logger ([https://hub.docker.com/r/makevg/web-logger](https://hub.docker.com/r/makevg/web-logger)).
 
@@ -55,7 +55,7 @@ Docker Compose version v2.28.1
 ![Результаты сканирования образа web-logger](images/web-logger_scan.png)
 
 
-## Задача 3  --- сборка контейнеров
+## Задача 3  - сборка контейнеров
 
 
 Подробно описано в **задаче 1**.
@@ -74,7 +74,7 @@ SELECT * from logs LIMIT 10;
 ![Результаты выполнения SQL-команд](images/sql-check.png)
 
 
-## Задача 4  --- проверка Интернет-ресурса
+## Задача 4  - проверка Интернет-ресурса
 
 Скрипт, копирующий исходный код на ВМ в Yandex.Cloud в файле [script.sh](scripts/script.sh).
 
@@ -85,7 +85,7 @@ _P.S. Почему-то при большом числе подключений 
 ![Результаты сканирования](images/scan.png)
 
 
-## Задача 5  --- SQLDUMP
+## Задача 5  - SQLDUMP
 
 Запуск контейнера из образа `schnitzler/mysqldump` для создания dump-а БД и сохранения в папке `/var/mysl/backup`:
 ```
@@ -118,7 +118,7 @@ chmod 600 ./scripts/crontab
 ![Журнал работы cron](images/backup-logs.png)
 
 
-## Задача 6  --- Terraform
+## Задача 6  - Terraform
 
 ### 6.1 - Использование инструментов (dive)
 
@@ -173,7 +173,7 @@ cp /opt/terraform/bin/terraform /tmp
 
 
 
-## Задача 7 --- runc
+## Задача 7 - runc
 
 
 ### Зависимости
