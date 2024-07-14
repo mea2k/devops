@@ -1,4 +1,4 @@
-FROM python:3.9-slim as builder
+FROM python:3.9-slim AS builder
 WORKDIR /var/www/app
 RUN python -m venv ./venv
 ENV PATH="/var/www/app/venv/bin:$PATH"
@@ -8,7 +8,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip -r requirements.txt
 
 
-FROM python:3.9-alpine as worker
+FROM python:3.9-alpine AS worker
 WORKDIR /var/www/app
 RUN addgroup --system python && \
     adduser --system --disabled-password  --ingroup python python && chown python:python /var/www/app

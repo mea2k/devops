@@ -31,7 +31,7 @@ Docker Compose version v2.28.1
 ![Схема стенда](images/%D1%81%D1%85%D0%B5%D0%BC%D0%B0_%D1%81%D1%82%D0%B5%D0%BD%D0%B4%D0%B0.png)
 
 
-Сборка контенера с приложением (`web-logger`) осуществляется с помощью файла [Dockerfile.python](Dockerfile.python).
+Сборка контейнера с приложением (`web-logger`) осуществляется с помощью файла [Dockerfile.python](Dockerfile.python).
 
 Требуемые переменные окружения ([.env](.env)):
 - `MYSQL_ROOT_PASSWORD` - пароль для инициализации MySQL
@@ -46,7 +46,7 @@ Docker Compose version v2.28.1
 - `APP_PORT` - порт, на котором будет запускаться приложение
 
 
-## Задача 2  - Yandex.Cloud
+## Задача 2  --- Yandex.Cloud
 
 Создан репозиторий в Yandex.Cloud. Туда и на открытый репозиторий размещен образ контейнера web-logger ([https://hub.docker.com/r/makevg/web-logger](https://hub.docker.com/r/makevg/web-logger)).
 
@@ -55,7 +55,7 @@ Docker Compose version v2.28.1
 ![Результаты сканирования образа web-logger](images/web-logger_scan.png)
 
 
-## Задача 3  - сборка контейнеров
+## Задача 3  --- сборка контейнеров
 
 
 Подробно описано в **задаче 1**.
@@ -74,7 +74,7 @@ SELECT * from logs LIMIT 10;
 ![Результаты выполнения SQL-команд](images/sql-check.png)
 
 
-## Задача 4  - проверка Интернет-ресурса
+## Задача 4  --- проверка Интернет-ресурса
 
 Скрипт, копирующий исходный код на ВМ в Yandex.Cloud в файле [script.sh](scripts/script.sh).
 
@@ -85,7 +85,7 @@ _P.S. Почему-то при большом числе подключений 
 ![Результаты сканирования](images/scan.png)
 
 
-## Задача 5  - SQLDUMP
+## Задача 5  --- SQLDUMP
 
 Запуск контейнера из образа `schnitzler/mysqldump` для создания dump-а БД и сохранения в папке `/var/mysl/backup`:
 ```
@@ -118,7 +118,7 @@ chmod 600 ./scripts/crontab
 ![Журнал работы cron](images/backup-logs.png)
 
 
-## Задача 6  - Terraform
+## Задача 6  --- Terraform
 
 ### 6.1 - Использование инструментов (dive)
 
@@ -132,7 +132,7 @@ docker pull hashicorp/terraform:latest
 docker save hashicorp/terraform:latest > terraform.tar
 ```
 
-3. Исследование образа с помощью утилиты dive (_портебовалось преобразовать образ с помощью skopeo, так как с какой-то версии он не поддерживается утилитой_):
+3. Исследование образа с помощью утилиты dive (_потребовалось преобразовать образ с помощью skopeo, так как с какой-то версии он не поддерживается утилитой_):
 ```
 skopeo --insecure-policy copy docker-archive:terraform.tar docker-archive:terraform_skopeo.tar
 dive --source docker-archive terraform_skopeo.tar
@@ -173,13 +173,99 @@ cp /opt/terraform/bin/terraform /tmp
 
 
 
-## Задача 7  - runc
+## Задача 7 --- runc
 
-### Задание
 
-Запустите ваше python-приложение с помощью runC, не используя docker или containerd.
-Предоставьте скриншоты действий .
+### Зависимости
 
+Необходимо дополнительно доставить:
+ - `bridge-utils`
+
+
+
+### Порядок действий
+
+1. Создать папку для экспорта данных из контейнера и перейти в неё
+```
+mkdir web-logger-runc
+cd web-logger-runc
+```
+
+2. Создать внутри папку `rootfs`, в которой будет содержаться образ нового контейнера
+```
+mkdir rootfs
+```
+
+3. Скопировать из контейнера всю файловую структуру. ID контейнера можно посмотреть командой `docker ps -a`. Можно взять контейнер `web-logger`, который создаётся с помощью команды `docker compose -f compose.yaml up`
+```
+docker export <containerID> | tar -C rootfs -xvf -
+```
+
+4. Создать файл-спецификацию контейнера (`config.json`)
+```
+runc spec
+```
+
+5. Отредактировать файл `config.json` - снять монтирование только для чтения
+```
+ "root": {
+   "path": "rootfs",
+   "readonly": false
+}
+```
+
+6. Добавить информацию про сетевые интерфейсы - в секции "namespace" изменить одно из значений с типом "network"
+```
+{
+     "type": "network",
+     "path": "/var/run/netns/runc"
+},
+```
+
+7. Создать сетевой мост и виртуальные сетевые интерфейсы
+```
+sudo brctl addbr runc0
+sudo ip link set runc0 up
+sudo ip addr add 192.168.100.1/24 dev runc0
+sudo ip link add name veth-host type veth peer name veth-guest
+sudo ip link set veth-host up
+sudo brctl addif runc0 veth-host
+sudo ip netns add runc
+sudo ip link set veth-guest netns runc
+sudo ip netns exec runc ip link set veth-guest name eth1
+sudo ip netns exec runc ip addr add 192.168.100.101/24 dev eth1
+sudo ip netns exec runc ip link set eth1 up
+sudo ip netns exec runc ip route add default via 192.168.100.1
+```
+
+8. Запустить контейнер (от имени root)
+```
+sudo runc run rootfs
+```
+
+9. Проверить, кто я внутри контейнера
+```
+whoami
+```
+
+10. Проверить сетевое взаимодействие. Для этого с хоста (другой консоли) пропинговать контейнер
+```
+ping 192.168.100.101
+```
+
+_P.S. Всё запустилось, но нет зависимых библиотек (flask). Сеть пока пробрасывается непонятно: снаружи пингуется, а изнутри - нет прав доступа на выполнение ping и другой сетевой активности._ 
+
+
+### Статьи, которые сильно помогли
+[https://habr.com/ru/companies/otus/articles/511414/](https://habr.com/ru/companies/otus/articles/511414/)
+
+[https://blog.quarkslab.com/digging-into-runtimes-runc.html](https://blog.quarkslab.com/digging-into-runtimes-runc.html)
+
+[https://selectel.ru/blog/en/2017/06/06/managing-containers-runc/?ysclid=lylzt5k3o2211056184](https://selectel.ru/blog/en/2017/06/06/managing-containers-runc/?ysclid=lylzt5k3o2211056184)
+
+[https://github.com/opencontainers/runc](https://github.com/opencontainers/runc)
+
+[https://github.com/opencontainers/runtime-spec/blob/main/config-linux.md](https://github.com/opencontainers/runtime-spec/blob/main/config-linux.md)
 
 
 

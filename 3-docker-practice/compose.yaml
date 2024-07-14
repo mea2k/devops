@@ -6,7 +6,7 @@ include:
 services:
   web:
     #image: makevg/web-logger
-    image: web_logger
+    image: web-logger
     build:
       context: ./
       dockerfile: ./Dockerfile.python
