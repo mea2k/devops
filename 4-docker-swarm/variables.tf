@@ -27,3 +27,22 @@ variable "yc_organization_id" {
   type        = string
   sensitive   = true
 }
+
+variable "yc_user_id" {
+  description = "Yandex User ID. Use 'yc organization-manager user list --organization-id <yc_organization_id>' to receive"
+  type        = string
+  sensitive   = true
+}
+
+
+variable "yc_public_key_ubuntu" {
+  description = "Public Key for VMs via OS Login (from Ubuntu VM Controller)"
+  type        = string
+  sensitive   = true
+}
+
+variable "yc_public_key_win" {
+  description = "Public Key for VMs via OS Login (from Windows Host)"
+  type        = string
+  sensitive   = true
+}
