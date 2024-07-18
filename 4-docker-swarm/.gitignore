@@ -1,0 +1,7 @@
+secret.*
+.terraform
+*.tfstate
+*.tfstate.*
+*.backup
+
+user-data
