@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  web:
+    image: makevg/web-logger
+    #image: web-logger
+    env_file: .env
+    ports:
+      - 5000:5000
+    depends_on:
+      - mysql
+    deploy:
+      mode: replicated
+      replicas: 2
+
+  mysql:
+    image: mysql:8
+    hostname: mysql
+    env_file: .env
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql_data:/var/lib/mysql:rw
+    command: --mysql-native-password=ON
+      #--initialize-insecure
+    healthcheck:
+      #test: out=$$(mysqladmin ping -hlocalhost -P3306 -uroot -p$${MYSQL_ROOT_PASSWORD} 2>&1); echo $$out | grep 'mysqld is alive' || { echo $$out; exit 1; }
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD' ]
+      interval: 40s
+      #timeout: 20s
+      retries: 2
+      #start_period: 20s
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 9000:8080
+    deploy:
+      mode: replicated
+      replicas: 1
+
+volumes:
+  mysql_data:
+    driver: local
+    
