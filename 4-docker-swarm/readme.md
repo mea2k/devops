@@ -72,11 +72,6 @@ docker service ps --no-trunc web_mysql
 ```
 
 
-docker service create --name web --replicas 2 --replicas-max-per-node 1 --constraint node.platform.linux==linux makevg/web-logger
-
-
-
-
 # Дополнительные материалы, которые мне помогли
 
 [https://ru.hexlet.io/courses/terraform-basics/lessons/example-with-db/theory_unit](https://ru.hexlet.io/courses/terraform-basics/lessons/example-with-db/theory_unit) - практика Terraform
