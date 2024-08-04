@@ -9,18 +9,19 @@
 2. [variables.tf](variables.tf) - описание требуемых для запуска переменных (учетные данные Yandex.Cloud)
 
 3. [main.tf](main.tf) - основной файл, содержащий описание:
-  - сети и подсети в Yandex.Cloud
-	
+	- сети и подсети в Yandex.Cloud
 	- генераторов символов (`random_password`): `rand_root_pwd` - пароль пользователя root для СУБД, `rand_user_pwd` - пароль основного пользователя СУБД
-	
 	- ВМ `docker-vm` на базе образа ОС Ubuntu20
-
 	- файл [install_docker_machine_compose.sh](install_docker_machine_compose.sh) - установщик docker и других компонентов - копируется на создаваемую ВМ и потом запускается 
-
 	- в процессе создания ВМ формируется файл `.env`, который копируется в `/tmp` - в нем содержатся переменные окружения для контейнера СУБД (mysql:8)
 
 
 ### Порядок запуска
+
+0. Создание SSH-ключей в папке `.ssh`
+```
+ssh-keygen -t ed25519
+```
 
 1. Запуск terraform и ожидание создания ВМ и выполнения сценария установки компонентов (install_docker_machine_compose.sh)
 ```
@@ -38,8 +39,8 @@ docker context ls
 ```
 docker context create remote --docker "host=ssh://{ssh_user}@{external_ip_address}"
 ```
-   - {ssh_user} - пользователь созданной ВМ
-	 - {external_ip_address} - внешний IP-адрес созданной ВМ
+	- {ssh_user} - пользователь созданной ВМ
+	- {external_ip_address} - внешний IP-адрес созданной ВМ
 
 5. Использование удаленного контекста
 ```
