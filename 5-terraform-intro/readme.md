@@ -92,8 +92,9 @@ keep_locally (Boolean) If true, then the Docker image won't be deleted on destro
 
 
 
+## Задача 2* - Docker context на удалённой ВМ, созданной с помощью Terraform
 
-
+Решение и описание тут: [remote-docker](remote-docker).
 
 
 
