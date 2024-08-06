@@ -18,6 +18,23 @@
 Все работает так же, даже дешевле _(комбинация standard-v3 + 20%CPU + preemptible=true на текущий момент самая дешевая)_.
 
 
+## Задание 3 - Создание двух ВМ
+
+Созданы файлы:
+  - [vm_web_platform.tf](vm_web_platform.tf) - переменные, описывающие ВМ web-платформы
+	- [vm_db_platform.tf](vm_db_platform.tf) - переменные, описывающие ВМ СУБД
+	
+Дополнен файл [main.tf](main.tf) - добавлена новая ВМ `netology-develop-platform-db` в зоне "ru-central1-b".
+
+Результат создания ВМ в Yandex.Cloud
+![Создание ВМ в Yandex.Cloud](images/z3-yandex_cloud.png)
+
+Результат выполнения команды `ping <VM2>` из SSH-консоли VM1
+![Ping VM1 --> VM2](images/z3-ping-vm1-vm2.png)
+
+
+
+
 
 
 
