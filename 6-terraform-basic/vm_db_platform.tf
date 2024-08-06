@@ -1,4 +1,10 @@
 ###vm vars
+variable "vm_db_prefix" {
+  type = string
+  description = "VM name prefix"
+  default = "vmdb"
+}
+
 variable "vm_db_os_family" {
   type = string
   description = "OS family from Yandex.CLoud ('yc compute image list --folder-id standard-images')"
@@ -8,7 +14,7 @@ variable "vm_db_os_family" {
 variable "vm_db_name" {
   type = string
   description = "VM name"
-  default = "netology-develop-platform-db"
+  default = "platform-db"
 }
 
 variable "vm_db_zone" {

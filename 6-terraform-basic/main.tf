@@ -19,7 +19,8 @@ data "yandex_compute_image" "ubuntu" {
   family = var.vm_web_os_family
 }
 resource "yandex_compute_instance" "platform_web" {
-  name        = var.vm_web_name
+  name        = local.vms_name["vm_web"] #var.vm_web_name
+  hostname    = local.vms_name["vm_web"]
   platform_id = var.vm_web_platform_id
   resources {
     cores         = var.vm_web_resources_cores
@@ -46,7 +47,8 @@ resource "yandex_compute_instance" "platform_web" {
 }
 
 resource "yandex_compute_instance" "platform_db" {
-  name        = var.vm_db_name
+  name        = local.vms_name["vm_db"]  #var.vm_db_name
+  hostname    = local.vms_name["vm_db"]
   zone        = var.vm_db_zone
   platform_id = var.vm_db_platform_id
   resources {

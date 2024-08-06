@@ -37,6 +37,13 @@ variable "vpc_sub_name" {
   description = "VPC subnet name"
 }
 
+variable "platform_type" {
+  type        = string
+  default     = "prod"
+  description = "Platform type {'prod', 'dev'}"
+}
+
+
 ###ssh vars
 
 variable "vms_ssh_root_key" {

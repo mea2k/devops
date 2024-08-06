@@ -1,4 +1,10 @@
 ###vm vars
+variable "vm_web_prefix" {
+  type = string
+  description = "VM name prefix"
+  default = "vmweb"
+}
+
 variable "vm_web_os_family" {
   type = string
   description = "OS family from Yandex.CLoud ('yc compute image list --folder-id standard-images')"
@@ -8,7 +14,7 @@ variable "vm_web_os_family" {
 variable "vm_web_name" {
   type = string
   description = "VM name"
-  default = "netology-develop-platform-web"
+  default = "platform-web"
 }
 
 variable "vm_web_zone" {

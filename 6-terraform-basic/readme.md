@@ -58,6 +58,15 @@ external_ips = [
 ![Вывод IP-адресов созданных ВМ](images/z4-output.png)
 
 
+## Задание 5 - Локальные переменные
+
+Добавлено содержимое файла [locals.tf](locals.tf) - добавлена локальная переменная `vms_name`, содержащая словарь с ключами `{"vm_web", "vm_db"}`. Переменная формирует имя ВМ исходя из префикса (`vm_{web|db}_prefix`), типа платформы (`platform_type`) и название ВМ (`vm_{web|db}_name`). Указанные реоеменные добавлены в файлы [variables.tf](variables.tf#L40), [vm_web_platform.tf](vm_web_platform.tf#L2), [vm_db_platform.tf](vm_dbb_platform.tf#L2)
+
+
+Созданные ВМ:
+  - `prod-vmdb-platform-db`
+	- `prod-vmweb-platform-web` 
+
 
 
 
