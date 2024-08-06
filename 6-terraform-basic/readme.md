@@ -2,9 +2,9 @@
 
 ## Задание 1 - Подготовка и запуск проекта
 
-Исправлены некоторые ошибки, создан вервисный аккаунт, к проекту добавлен файл с ключами (authorized_key.json).
+Исправлены некоторые ошибки, создан сервисный аккаунт, к проекту добавлен файл с ключами (authorized_key.json).
 
-Результат создания и запуска ВМ в консоле Yzndex.Cloud
+Результат создания и запуска ВМ в консоли Yandex.Cloud
 ![Результат создания ВМ в Яндекс.Облаке](images/z1-yandex_cloud.png)
 
 Результат подключения по SSH к созданной ВМ
@@ -21,8 +21,8 @@
 ## Задание 3 - Создание двух ВМ
 
 Созданы файлы:
-  - [vm_web_platform.tf](vm_web_platform.tf) - переменные, описывающие ВМ web-платформы
-	- [vm_db_platform.tf](vm_db_platform.tf) - переменные, описывающие ВМ СУБД
+- [vm_web_platform.tf](vm_web_platform.tf) - переменные, описывающие ВМ web-платформы
+- [vm_db_platform.tf](vm_db_platform.tf) - переменные, описывающие ВМ СУБД
 	
 Дополнен файл [main.tf](main.tf) - добавлена новая ВМ `netology-develop-platform-db` в зоне "ru-central1-b".
 
@@ -60,12 +60,12 @@ external_ips = [
 
 ## Задание 5 - Локальные переменные
 
-Добавлено содержимое файла [locals.tf](locals.tf) - добавлена локальная переменная `vms_name`, содержащая словарь с ключами `{"vm_web", "vm_db"}`. Переменная формирует имя ВМ исходя из префикса (`vm_{web|db}_prefix`), типа платформы (`platform_type`) и название ВМ (`vm_{web|db}_name`). Указанные реоеменные добавлены в файлы [variables.tf](variables.tf#L40), [vm_web_platform.tf](vm_web_platform.tf#L2), [vm_db_platform.tf](vm_dbb_platform.tf#L2)
+Добавлено содержимое файла [locals.tf](locals.tf) - добавлена локальная переменная `vms_name`, содержащая словарь с ключами `{"vm_web", "vm_db"}`. Переменная формирует имя ВМ исходя из префикса (`vm_{web|db}_prefix`), типа платформы (`platform_type`) и название ВМ (`vm_{web|db}_name`). Указанные переменные добавлены в файлы [variables.tf](variables.tf#L40), [vm_web_platform.tf](vm_web_platform.tf#L2), [vm_db_platform.tf](vm_dbb_platform.tf#L2)
 
 
 Имена созданных ВМ:
-  - `prod-vmdb-platform-db`
-	- `prod-vmweb-platform-web` 
+- `prod-vmdb-platform-db`
+- `prod-vmweb-platform-web` 
 
 ## Задание 6 - Единый блок
 
