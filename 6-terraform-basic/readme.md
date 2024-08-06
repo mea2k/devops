@@ -33,6 +33,29 @@
 ![Ping VM1 --> VM2](images/z3-ping-vm1-vm2.png)
 
 
+## Задание 4 - Output
+
+Дополнен файл [outputs.tf](outputs.tf) - добавлен вывод IP-адресов созданных ВМ.
+```
+$ terraform output
+
+external_ips = [
+  {
+    "vm_web" = {
+      "external" = "ssh -o 'StrictHostKeyChecking=no' ubuntu@51.250.79.236"
+      "internal" = "10.0.1.31"
+    }
+  },
+  {
+    "vm_db" = {
+      "external" = "ssh -o 'StrictHostKeyChecking=no' ubuntu@51.250.17.109"
+      "internal" = "10.0.2.32"
+    }
+  },
+]
+```
+
+![Вывод IP-адресов созданных ВМ](images/z4-output.png)
 
 
 
