@@ -81,7 +81,7 @@ external_ips = [
 Результат - создание таких же переменных, что и в прошлых заданиях.
 
 
-## Задание 7 - Terraform Console
+## Задание 7* - Terraform Console
 
 Основной код в файле [console.tf](console.tf)
 
@@ -108,6 +108,45 @@ external_ips = [
 > "${local.test_map["admin"]} is admin for ${local.test_list[2]} server based on OS ${local.servers["production"].image} with ${local.servers["production"].cpu} vcpu, ${local.servers["production"].ram} ram and ${length(local.servers["production"].disks)} virtual disks"
 	"John is admin for production server based on OS ubuntu-20-04 with 10 vcpu, 40 ram and 4 virtual disks"
 ```
+
+## Задание 7* - Terraform Console 2
+
+1. Тип переменной `test` (добавлена в файл [console.tf](console.tf#L32))
+```
+> type(local.test)
+tuple([
+    object({
+        dev1: tuple([
+            string,
+            string,
+        ]),
+    }),
+    object({
+        dev2: tuple([
+            string,
+            string,
+        ]),
+    }),
+    object({
+        prod1: tuple([
+            string,
+            string,
+        ]),
+    }),
+])
+```
+
+Моя версия:
+```
+list(map(list(string)))
+```
+
+2. Вычленить _"ssh -o 'StrictHostKeyChecking=no' ubuntu@62.84.124.117"_
+```
+> local.test[0]["dev1"][0]
+	"ssh -o 'StrictHostKeyChecking=no' ubuntu@62.84.124.117"
+```
+
 
 # ЗАДАНИЕ
 [https://github.com/netology-code/ter-homeworks/blob/main/02/hw-02.md](https://github.com/netology-code/ter-homeworks/blob/main/02/hw-02.md)
