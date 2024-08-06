@@ -63,9 +63,22 @@ external_ips = [
 Добавлено содержимое файла [locals.tf](locals.tf) - добавлена локальная переменная `vms_name`, содержащая словарь с ключами `{"vm_web", "vm_db"}`. Переменная формирует имя ВМ исходя из префикса (`vm_{web|db}_prefix`), типа платформы (`platform_type`) и название ВМ (`vm_{web|db}_name`). Указанные реоеменные добавлены в файлы [variables.tf](variables.tf#L40), [vm_web_platform.tf](vm_web_platform.tf#L2), [vm_db_platform.tf](vm_dbb_platform.tf#L2)
 
 
-Созданные ВМ:
+Имена созданных ВМ:
   - `prod-vmdb-platform-db`
 	- `prod-vmweb-platform-web` 
+
+## Задание 6 - Единый блок
+
+1. Добавлен блок переменных `vms_resources` в файл [variables.tf](variables.tf#L56).
+
+2. Закомментированы ненужные теперь переменные в файлах [vm_web_platform.tf](vm_web_platform.tf#L38) и [vm_db_platform.tf](vm_db_platform.tf#L38).
+
+3. Добавлен блок локальных переменных `vms_metadata` в файл [locals.tf](locals.tf#L7) - чтобы была возможность проинициализировать значение по умолчанию другой переменной (`var.vms_ssh_root_key`)
+
+4. Исправлен файл [main.tf](main.tf) - изменены ссылки на переменные - теперь всё ссылается только на `vms_resources` и `vms_metadata`.
+
+
+Результат - создание таких же переменных, что и в прошлых заданиях.
 
 
 

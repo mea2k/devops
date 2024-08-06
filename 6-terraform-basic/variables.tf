@@ -52,3 +52,41 @@ variable "vms_ssh_root_key" {
 }
 
 
+###vms resources
+variable "vms_resources" {
+  type =   map(object({
+    platform_id: string,
+    cores: number,
+    memory: number,
+    core_fraction: number,
+    preemptible: bool,
+    hdd_size: number,
+    hdd_type: string,
+    enable_nat: bool
+}))
+  description = "{platform_id=<STRING>, cores=<NUMBER>, memory=<NUMBER>, core_fraction=<NUMBER>, vm_db_preemptible: <BOOL>, hdd_size=<NUMBER>, hdd_type=<STRING>, enable_nat: <BOOL>}"
+  default = {
+    "vm_web" = {
+      platform_id="standard-v3"
+      cores=2
+      memory=1
+      core_fraction=20
+      preemptible=true
+      hdd_size=10
+      hdd_type="network-hdd"
+      enable_nat=true
+    },
+    "vm_db" = {
+      platform_id="standard-v3"
+      cores=2
+      memory=2
+      core_fraction=20
+      preemptible=true
+      hdd_size=10
+      hdd_type="network-hdd"
+      enable_nat=true
+    }
+  }
+}
+
+
