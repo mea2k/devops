@@ -91,5 +91,16 @@ variable "vms_resources" {
       hdd_type      = "network-hdd"
       enable_nat    = true
     },
+    storage = {
+      name          = "storage"
+      platform_id   = "standard-v3"
+      cores         = 2
+      memory        = 1
+      core_fraction = 20
+      preemptible   = true
+      hdd_size      = 10
+      hdd_type      = "network-hdd"
+      enable_nat    = true
+    },
   }
 }

@@ -1,16 +1,16 @@
 resource "yandex_compute_disk" "vdisk" {
   count = 3
-	
-	name     = "vdisk-${count.index + 1}"
-  type     = "network-hdd"
-  zone     = var.default_zone
-  size     = "1"
+
+  name = "vdisk-${count.index + 1}"
+  type = "network-hdd"
+  zone = var.default_zone
+  size = "1"
 }
 
 
 resource "yandex_compute_instance" "vm_storage" {
-  name        = "${var.vms_resources["storage"].name}"
-  hostname    = "${var.vms_resources["storage"].name}"
+  name        = var.vms_resources["storage"].name
+  hostname    = var.vms_resources["storage"].name
   platform_id = var.vms_resources["storage"].platform_id
   resources {
     cores         = var.vms_resources["storage"].cores
@@ -36,13 +36,13 @@ resource "yandex_compute_instance" "vm_storage" {
     serial-port-enable = local.vms_metadata.serial_port_enable #1
     ssh-keys           = local.vms_metadata.ssh_keys[0]        #"ubuntu:${var.vms_ssh_root_key}"
   }
-	
-	dynamic "secondary_disk" {
-		for_each = yandex_compute_disk.vdisk
 
-		content {
-			disk_id = lookup(secondary_disk.value, "id", null)
-			auto_delete = true
-		} 
-	}
+  dynamic "secondary_disk" {
+    for_each = yandex_compute_disk.vdisk
+
+    content {
+      disk_id     = lookup(secondary_disk.value, "id", null)
+      auto_delete = true
+    }
+  }
 }

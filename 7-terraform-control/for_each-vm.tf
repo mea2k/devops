@@ -1,6 +1,6 @@
 locals {
   # список объектов из vms_resources с именем 'main'
-	vm_mains = [for object in var.vms_resources : object.name if object.name == "main"]
+  vm_mains = [for object in var.vms_resources : object.name if object.name == "main"]
 
   # список объектов из vms_resources с именем 'replica'
   vm_replicas = [for object in var.vms_resources : object.name if object.name == "replica"]

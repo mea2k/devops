@@ -1,7 +1,3 @@
-data "yandex_compute_image" "ubuntu" {
-  family = var.image_os_family
-}
-
 # locals {
 #   # список объектов из vms_resources с именем 'web'
 #   vm_web_resources = [for object in var.vms_resources : object if object.name == "web"]
@@ -43,5 +39,5 @@ resource "yandex_compute_instance" "vm_web" {
     serial-port-enable = local.vms_metadata.serial_port_enable #1
     ssh-keys           = local.vms_metadata.ssh_keys[0]        #"ubuntu:${var.vms_ssh_root_key}"
   }
-	depends_on = [ yandex_compute_instance.vm_db ]
+  depends_on = [yandex_compute_instance.vm_db]
 }
