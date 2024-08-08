@@ -45,9 +45,69 @@
 ![Файл hosts.ini](images/z4-hosts-ini.png)
 
 
-## Дополнительные задания (со звездочкой*)
+## Задание 5* - Форматированный вывод
 
-_Не успеваю - модуль закрывается через 2 дня. В спокойном режиме сделаю и обновлю репозиторий.._
+В файле [outputs.tf](outputs.tf) Реализованы циклы для вывода параметров _(extIP, intIP, ssh_string)_ созданных ВМ.
+
+
+## Задание 6* - Ansible
+
+_Выполню, когда изучим Ansible_.
+
+
+## Задание 7* - Работа с массивами
+
+Входные параметры
+```
+> local.vpc
+{
+  "network_id" = "enp7i560tb28nageq0cc"
+  "subnet_ids" = [
+    "e9b0le401619ngf4h68n",
+    "e2lbar6u8b2ftd7f5hia",
+    "b0ca48coorjjq93u36pl",
+    "fl8ner8rjsio6rcpcf0h",
+  ]
+  "subnet_zones" = [
+    "ru-central1-a",
+    "ru-central1-b",
+    "ru-central1-c",
+    "ru-central1-d",
+  ]
+}
+```
+Вырезаем 3-й эоемент в массивах `vpc["subnet_ids"]` и `vpc["subnet_zones"]`
+``` 
+> concat(slice(local.vpc["subnet_ids"],0,2),slice(local.vpc["subnet_ids"],3,length(local.vpc["subnet_ids"])))
+[
+  "e9b0le401619ngf4h68n",
+  "e2lbar6u8b2ftd7f5hia",
+  "fl8ner8rjsio6rcpcf0h",
+]
+
+> concat(slice(local.vpc["subnet_zones"],0,2),slice(local.vpc["subnet_zones"],3,length(local.vpc["subnet_zones"])))
+[
+  "ru-central1-a",
+  "ru-central1-b",
+  "ru-central1-d",
+]
+>
+```
+
+## Задание 8 - Неверный шаблон
+
+Шаблон с ошибками (исправленная версия - [hosts2.tftpl](hosts2.tftpl)):
+```
+[webservers]
+%{~ for i in webservers ~}
+${i["name"]} ansible_host=${i["network_interface"][0]["nat_ip_address"] platform_id=${i["platform_id "]}}
+%{~ endfor ~}
+```
+
+Ошибки
+1. Неверное расположение закрывающей фигурной скобки `...{i["platform_id "]}}` - её надо после `...[0]["nat_ip_address"]`
+
+2. Неверный параметр элемента (ключ) `${i["platform_id "]}` - надо  `${i["platform_id"]}` _(без пробела)_
 
 
 # Задание
