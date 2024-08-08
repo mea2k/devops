@@ -76,7 +76,7 @@ _Выполню, когда изучим Ansible_.
   ]
 }
 ```
-Вырезаем 3-й эоемент в массивах `vpc["subnet_ids"]` и `vpc["subnet_zones"]`
+Вырезаем 3-й элемент в массивах `vpc["subnet_ids"]` и `vpc["subnet_zones"]`
 ``` 
 > concat(slice(local.vpc["subnet_ids"],0,2),slice(local.vpc["subnet_ids"],3,length(local.vpc["subnet_ids"])))
 [
@@ -94,7 +94,7 @@ _Выполню, когда изучим Ansible_.
 >
 ```
 
-## Задание 8 - Неверный шаблон
+## Задание 8* - Неверный шаблон
 
 Шаблон с ошибками (исправленная версия - [hosts2.tftpl](hosts2.tftpl)):
 ```
@@ -106,8 +106,9 @@ ${i["name"]} ansible_host=${i["network_interface"][0]["nat_ip_address"] platform
 
 Ошибки
 1. Неверное расположение закрывающей фигурной скобки `...{i["platform_id "]}}` - её надо после `...[0]["nat_ip_address"]`
-
 2. Неверный параметр элемента (ключ) `${i["platform_id "]}` - надо  `${i["platform_id"]}` _(без пробела)_
+3. Необходимо добавить ещё `Enter` после конца строки перед `%{~ endfor ~}`.
+
 
 
 # Задание
