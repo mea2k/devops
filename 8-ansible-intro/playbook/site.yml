@@ -1,0 +1,38 @@
+---
+  - name: install python3 on centos
+    hosts: el
+    gather_facts: false
+    tasks:
+    - name: install python3
+      raw: sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* && yum update -y && yum install -y python3
+
+  - name: install python3 on AltLinux
+    hosts: alt
+    gather_facts: false
+    tasks:
+    - name: install python3
+      raw: apt-get update && apt-get install -y python3
+
+  - name: install python3 on Ubuntu
+    hosts: ubuntu
+    gather_facts: false
+    tasks:
+    - name: install python3
+      raw: apt update && apt install -y python3
+
+
+  - name: Print os facts
+    hosts: all
+    tasks:
+    - name: Print OS
+      debug:
+        msg: "{{ ansible_distribution }}"
+    - name: Print fact
+      debug:
+        msg: "{{ some_fact }}"
+
+
+  - name: Set default tmp dir
+    hosts: all
+    # vars:
+    #   ansible_remote_tmp: /tmp/ansible

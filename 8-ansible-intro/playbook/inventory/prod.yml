@@ -1,0 +1,18 @@
+---
+  el:
+    hosts:
+      centos:
+        ansible_connection: docker
+  alt:
+    hosts:
+      altlinux:
+        ansible_connection: docker
+  ub:
+    hosts:
+      ubuntu:
+        ansible_connection: docker
+
+  local:
+    hosts:
+      localhost:
+        ansible_connection: local
