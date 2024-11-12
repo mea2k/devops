@@ -65,7 +65,7 @@ _3 docker-контейнера: AltLinux, CentOs7, Ubuntu_
 
 Файл [playbook/inventory/prod.yml](playbook/inventory/prod.yml)
 
-Файл [playbook.site.yml](playbook/site.yml)
+Файл [playbook/site.yml](playbook/site.yml)
 
 
 4. Проведите запуск playbook на окружении из prod.yml. Зафиксируйте полученные значения `some_fact` для каждого из managed host.
