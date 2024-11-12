@@ -7,7 +7,7 @@
     hosts:
       altlinux:
         ansible_connection: docker
-  ub:
+  ubuntu:
     hosts:
       ubuntu:
         ansible_connection: docker
