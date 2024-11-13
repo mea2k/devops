@@ -2,4 +2,19 @@
 clickhouse:
   hosts:
     clickhouse-01:
-      ansible_host: <IP_here>
+      ansible_host: 158.160.47.167
+      ansible_user: admin
+      become: true
+
+
+vector:
+  hosts:
+    vector-01:
+      ansible_host: 62.84.124.102
+      ansible_user: admin
+      become: true
+
+local:
+  hosts:
+    localhost:
+      ansible_connection: local
