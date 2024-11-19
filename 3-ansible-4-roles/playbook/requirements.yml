@@ -4,4 +4,12 @@
     version: "1.13"
     name: clickhouse
 
+  - src: https://github.com/mea2k/ansible-roles/tree/main/vector
+    scm: git
+    version: "1.0.0"
+    name: vector
 
+  - src: https://github.com/mea2k/ansible-roles/tree/main/lighthouse
+    scm: git
+    version: "1.0.0"
+    name: lighthouse

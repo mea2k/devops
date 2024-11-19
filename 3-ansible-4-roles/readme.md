@@ -88,7 +88,7 @@ _Измененные файлы:_
 
   - Git - [playbook/roles/lighthouse/tasks/dependencies/git.yml](playbook/roles/lighthouse/tasks/dependencies/git.yml)
 
-  - Epel-release (только для CentOS) - [playbook/roles/lighthouse/tasks/dependencies/epel.yml](playbook/roles/lighthouse/tasks/dependencies/epel.yml)
+  - Epel-release _(только для CentOS)_ - [playbook/roles/lighthouse/tasks/dependencies/epel.yml](playbook/roles/lighthouse/tasks/dependencies/epel.yml)
 
   б) конфигурационные файлы:
   - для Nginx - [playbook/roles/lighthouse/tasks/config/nginx.yml](playbook/roles/lighthouse/tasks/config/nginx.yml), на основе шаблона [playbook/roles/lighthouse/templates/nginx.conf.j2](playbook/roles/lighthouse/templates/nginx.conf.j2)
@@ -101,9 +101,31 @@ _Измененные файлы:_
 
 6. Выложите все roles в репозитории. Проставьте теги, используя семантическую нумерацию. Добавьте roles в requirements.yml в playbook.
 
+Роль Vector: [https://github.com/mea2k/ansible-roles/tree/main/vector](https://github.com/mea2k/ansible-roles/tree/main/vector)
+
+Роль Lighthouse: [https://github.com/mea2k/ansible-roles/tree/main/lighthouse](https://github.com/mea2k/ansible-roles/tree/main/lighthouse)
+
 
 7. Переработайте playbook на использование roles. Не забудьте про зависимости LightHouse и возможности совмещения roles с tasks.
 
+Новая версия файла [playbook/requirements.yml](playbook/requirements.yml):
+```
+---
+  - src: https://git@github.com/AlexeySetevoi/ansible-clickhouse.git
+    scm: git
+    version: "1.13"
+    name: clickhouse
+
+  - src: https://github.com/mea2k/ansible-roles/tree/main/vector
+    scm: git
+    version: "1.0.0"
+    name: vector
+
+  - src: https://github.com/mea2k/ansible-roles/tree/main/lighthouse
+    scm: git
+    version: "1.0.0"
+    name: lighthouse
+```
 
 
 
