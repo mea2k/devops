@@ -59,40 +59,44 @@ ansible-galaxy role init --init-path ./roles/ lighthouse
 _Измененные файлы:_
   1. [playbook/roles/lighthouse/defaults/main.yml](playbook/roles/lighthouse/defaults/main.yml) - изменяемые параметры роли:
     
-    - `lighthouse_vcs` - URL репозитория Lighthouse ('https://github.com/VKCOM/lighthouse.git')
-    - `lighthouse_location_dir` - путь установки (`/var/www/lighthouse`)
-    - `lighthouse_access_log_name` - название журнала доступа к lighthouse (`lighthouse`)
+  - `lighthouse_vcs` - URL репозитория Lighthouse ('https://github.com/VKCOM/lighthouse.git')
+  - `lighthouse_location_dir` - путь установки (`/var/www/lighthouse`)
+  - `lighthouse_access_log_name` - название журнала доступа к lighthouse (`lighthouse`)
 
   2. [playbook/roles/lighthouse/vars/main.yml](playbook/roles/lighthouse/vars/main.yml) - неизменяемые параметры роли:
-    - `nginx_user_name` - имя пользователя для nginx (`nginx`)
+
+  - `nginx_user_name` - имя пользователя для nginx (`nginx`)
 
   3. Дополнительные файлы с параметрами роли:
-    - [playbook/roles/lighthouse/vars/debian.yml](playbook/roles/lighthouse/vars/debian.yml) - переменные для ОС Debian
+ 
+  - [playbook/roles/lighthouse/vars/debian.yml](playbook/roles/lighthouse/vars/debian.yml) - переменные для ОС Debian
 
-    - [playbook/roles/lighthouse/vars/fedora.yml](playbook/roles/lighthouse/vars/fedora.yml) - переменные для ОС Fedora Core
+  - [playbook/roles/lighthouse/vars/fedora.yml](playbook/roles/lighthouse/vars/fedora.yml) - переменные для ОС Fedora Core
 
-    - [playbook/roles/lighthouse/vars/redhat.yml](playbook/roles/lighthouse/vars/redhat.yml) - переменные для ОС Redhat
+  - [playbook/roles/lighthouse/vars/redhat.yml](playbook/roles/lighthouse/vars/redhat.yml) - переменные для ОС Redhat
 
-    - [playbook/roles/lighthouse/vars/centos.yml](playbook/roles/lighthouse/vars/centos.yml) - переменные для ОС CentOS
+  - [playbook/roles/lighthouse/vars/centos.yml](playbook/roles/lighthouse/vars/centos.yml) - переменные для ОС CentOS
 
-    - [playbook/roles/lighthouse/vars/empty.yml](playbook/roles/lighthouse/vars/empty.yml) - переменные для других ОС
+  - [playbook/roles/lighthouse/vars/empty.yml](playbook/roles/lighthouse/vars/empty.yml) - переменные для других ОС
 
   4. Handlers: [playbook/roles/lighthouse/handlers/main.yml](playbook/roles/lighthouse/handlers/main.yml)
 
   5. Tasks:
-    а) установка дополнительных компонентов:
-      - Nginx - [playbook/roles/lighthouse/tasks/dependencies/nginx.yml](playbook/roles/lighthouse/tasks/dependencies/nginx.yml)
-
-      - Git - [playbook/roles/lighthouse/tasks/dependencies/git.yml](playbook/roles/lighthouse/tasks/dependencies/git.yml)
-
-      - Epel-release (только для CentOS) - [playbook/roles/lighthouse/tasks/dependencies/epel.yml](playbook/roles/lighthouse/tasks/dependencies/epel.yml)
-
-    б) конфигурационные файлы:
-      - для Nginx - [playbook/roles/lighthouse/tasks/config/nginx.yml](playbook/roles/lighthouse/tasks/config/nginx.yml), на основе шаблона [playbook/roles/lighthouse/templates/nginx.conf.j2](playbook/roles/lighthouse/templates/nginx.conf.j2)
     
-    в) установка самого Lighthouse:
-      - главный файл - [playbook/roles/lighthouse/tasks/main.yml](playbook/roles/lighthouse/tasks/main.yml)
-      - шаблон конфигурационного файла Lighthouse - [playbook/roles/lighthouse/templates/lighthouse.conf.j2](playbook/roles/lighthouse/templates/lighthouse.conf.j2)
+  а) установка дополнительных компонентов:
+  - Nginx - [playbook/roles/lighthouse/tasks/dependencies/nginx.yml](playbook/roles/lighthouse/tasks/dependencies/nginx.yml)
+
+  - Git - [playbook/roles/lighthouse/tasks/dependencies/git.yml](playbook/roles/lighthouse/tasks/dependencies/git.yml)
+
+  - Epel-release (только для CentOS) - [playbook/roles/lighthouse/tasks/dependencies/epel.yml](playbook/roles/lighthouse/tasks/dependencies/epel.yml)
+
+  б) конфигурационные файлы:
+  - для Nginx - [playbook/roles/lighthouse/tasks/config/nginx.yml](playbook/roles/lighthouse/tasks/config/nginx.yml), на основе шаблона [playbook/roles/lighthouse/templates/nginx.conf.j2](playbook/roles/lighthouse/templates/nginx.conf.j2)
+  
+  в) установка самого Lighthouse:
+  - главный файл - [playbook/roles/lighthouse/tasks/main.yml](playbook/roles/lighthouse/tasks/main.yml)
+  - шаблон конфигурационного файла Lighthouse - [playbook/roles/lighthouse/templates/lighthouse.conf.j2](playbook/roles/lighthouse/templates/lighthouse.conf.j2)
+
 
 
 6. Выложите все roles в репозитории. Проставьте теги, используя семантическую нумерацию. Добавьте roles в requirements.yml в playbook.
