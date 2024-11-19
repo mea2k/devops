@@ -1,0 +1,4 @@
+---
+# переменные, которые нельзя переопределять пользователям
+vector_config_dir: "{{ ansible_user_dir }}/vector_config"
+vector_config:

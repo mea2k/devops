@@ -1,0 +1,13 @@
+- name: Lighthouse | Install dependencies [NGINX]
+  become: true
+  ansible.builtin.yum:
+    name: nginx
+    state: present
+
+- name: create config
+  become: true
+  ansible.builtin.template:
+    src: templates/nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    mode: '0644'
+  notify: restart-nginx

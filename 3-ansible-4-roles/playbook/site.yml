@@ -1,0 +1,43 @@
+---
+  - name: Install Clickhouse
+    hosts: clickhouse
+    roles:
+      - clickhouse
+    vars:
+      clickhouse_users_custom:
+        - { name: "testuser",
+            password_sha256_hex: "f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93b7605022da52e6ccc26fd2",
+            networks: "{{ clickhouse_networks_default }}",
+            profile: "default",
+            quota: "default",
+            dbs: [ testu1 ] ,
+            comment: "classic user with plain password"}
+      clickhouse_query_log_ttl: 'event_date + INTERVAL 7  DELETE'
+      clickhouse_query_thread_log_ttl: 'event_date + INTERVAL 7  DELETE'
+      clickhouse_dicts:
+          test1:
+            name: test_dict
+            odbc_source:
+              connection_string: "DSN=testdb"
+              source_table: "dict_source"
+            lifetime:
+              min: 300
+              max: 360
+            layout: hashed
+            structure:
+              key: "testIntKey"
+              attributes:
+                - { name: testAttrName, type: UInt32, null_value: 0 }
+    
+  - name: Install vector
+    hosts: vector
+    roles:
+      - vector
+    
+  - name: Install Lighthouse
+    hosts: lighthouse
+    roles:
+      - lighthouse
+  
+
+  

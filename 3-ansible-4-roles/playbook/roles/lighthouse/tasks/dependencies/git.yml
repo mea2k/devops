@@ -1,0 +1,5 @@
+- name: Lighthouse | Install dependencies [GIT]
+  become: true
+  ansible.builtin.yum:
+    name: git
+    state: present

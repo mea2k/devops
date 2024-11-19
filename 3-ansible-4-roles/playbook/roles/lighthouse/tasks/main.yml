@@ -1,0 +1,64 @@
+---
+# Определение версии ОС и загрузка дополнительных переменных
+- name: 'Include OS Family Specific Variables'
+  #include_vars: "{{ lookup('first_found', params) }}"
+  debug:
+    msg: "{{ ansible_os_family | lower }}"
+  vars:
+    params:
+      files:
+        - "{{ ansible_os_family | lower }}.yml"
+        - 'empty.yml'
+      paths:
+        - 'vars'
+  tags: [always]
+
+# Установка зависимостей
+- include_tasks: dependencies/nginx.yml
+  tags: [always]
+
+- include_tasks: dependencies/git.yml
+  tags: [always]
+
+# Only for Centos
+- include_tasks: dependencies/epel.yml
+  tags: [always]
+  when: ansible_os_family == 'centos'
+
+# Настройка конфигурационных файлов
+- include_tasks: config/nginx.yml
+  tags: [always]
+
+# Установка Lighthouse
+- name: Lighthouse | Create Lighthouse directory
+  become: true
+  ansible.builtin.file:
+    path: "{{ lighthouse_location_dir }}"
+    state: directory
+    owner: admin
+    group: nginx
+    mode: '0775'
+    selevel: s0
+    serole: object_r
+    setype: httpd_sys_content_t
+    seuser: unconfined_u      
+
+
+- name: Lighthouse | Make git safe directory
+  ansible.builtin.command: "git config --global --add safe.directory {{ lighthouse_location_dir }}"
+  check_mode: no
+
+- name: Lighthouse | Clone from Git
+  ansible.builtin.git:
+    repo: "{{ lighthouse_vcs }}"
+    version: master
+    dest: "{{ lighthouse_location_dir }}"
+    force: yes
+
+- name: Lighthouse | Create lighthouse config
+  become: true
+  ansible.builtin.template:
+    src: templates/lighthouse.conf.j2
+    dest: /etc/nginx/conf.d/default.conf
+    mode: '0644'
+  notify: restart-nginx

@@ -1,0 +1,31 @@
+---
+clickhouse:
+  hosts:
+    clickhouse-01:
+      ansible_host: 158.160.43.3
+      ansible_user: admin
+      ansible_ssh_common_args: -o StrictHostKeyChecking=no
+      become: true
+      
+
+vector:
+  hosts:
+    vector-01:
+      ansible_host: 158.160.54.247
+      ansible_user: admin
+      ansible_ssh_common_args: -o StrictHostKeyChecking=no
+      become: true
+
+lighthouse:
+  hosts:
+    lighthouse-01:
+      ansible_host: 158.160.41.76
+      ansible_user: admin
+      ansible_ssh_common_args: -o StrictHostKeyChecking=no
+      become: true
+
+
+local:
+  hosts:
+    localhost:
+      ansible_connection: local

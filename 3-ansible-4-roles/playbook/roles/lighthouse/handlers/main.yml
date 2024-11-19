@@ -1,0 +1,7 @@
+---
+# handlers file for lighthouse
+- name: restart-nginx
+  become: true
+  ansible.builtin.service:
+    name: nginx
+    state: restarted
