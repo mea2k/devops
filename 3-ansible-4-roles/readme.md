@@ -101,9 +101,9 @@ _Измененные файлы:_
 
 6. Выложите все roles в репозитории. Проставьте теги, используя семантическую нумерацию. Добавьте roles в requirements.yml в playbook.
 
-Роль Vector: [https://github.com/mea2k/ansible-roles/tree/main/vector](https://github.com/mea2k/ansible-roles/tree/main/vector)
+Роль Vector: [https://github.com/mea2k/ansible-role-vector](https://github.com/mea2k/ansible-role-vector)
 
-Роль Lighthouse: [https://github.com/mea2k/ansible-roles/tree/main/lighthouse](https://github.com/mea2k/ansible-roles/tree/main/lighthouse)
+Роль Lighthouse: [https://github.com/mea2k/ansible-role-lighthouse](https://github.com/mea2k/ansible-role-lighthouse)
 
 
 7. Переработайте playbook на использование roles. Не забудьте про зависимости LightHouse и возможности совмещения roles с tasks.
@@ -111,20 +111,20 @@ _Измененные файлы:_
 Новая версия файла [playbook/requirements.yml](playbook/requirements.yml):
 ```
 ---
-  - src: https://git@github.com/AlexeySetevoi/ansible-clickhouse.git
-    scm: git
-    version: "1.13"
-    name: clickhouse
+- src: https://<git_token>@github.com/AlexeySetevoi/ansible-clickhouse.git
+  scm: git
+  version: "1.13"
+  name: clickhouse
 
-  - src: https://github.com/mea2k/ansible-roles/tree/main/vector
-    scm: git
-    version: "1.0.0"
-    name: vector
+ - src: https://<git_token>@github.com/mea2k/ansible-role-vector
+  scm: git
+  version: "1.0.0"
+  name: vector
 
-  - src: https://github.com/mea2k/ansible-roles/tree/main/lighthouse
-    scm: git
-    version: "1.0.0"
-    name: lighthouse
+- src: https://<git_token>@github.com/mea2k/ansible-role-lighthouse
+  scm: git
+  version: "1.0.0"
+  name: lighthouse
 ```
 
 
