@@ -24,7 +24,7 @@ _Изменения:_ изменен адрес репозитория:
 src: https://git@github.com/AlexeySetevoi/ansible-clickhouse.git
 ```
 
-Результат: в папке [roles](playbook/roles/) появилась роль [clickhouse](playbook/roles/clickhouse/) со всей вложенной структурой
+Результат: в папке [roles](playbook/roles/) появилась роль [clickhouse](playbook/roles/clickhouse/) со всей вложенной структурой.
 
 
 2. Создайте новый каталог с ролью при помощи `ansible-galaxy role init vector-role`.
@@ -34,20 +34,21 @@ _Команда:_
 ansible-galaxy role init --init-path ./roles/ vector
 ```
 
-_Результат:_ в папке [roles](playbook/roles/) появилась роль [vector](playbook/roles/vector/) со всей вложенной структурой
+_Результат:_ в папке [roles](playbook/roles/) появилась роль [vector](playbook/roles/vector/) со всей вложенной структурой.
 
 3. На основе tasks из старого playbook заполните новую role. Разнесите переменные между vars и default.
 
 _Файлы:_
- - [playbook/roles/vector/defaults/main.yml](playbook/roles/vector/defaults/main.yml) - содержит переменные
-   - `vector_version` - устанавливаемая версия
- - [playbook/roles/vector/vars/main.yml](playbook/roles/vector/vars/main.yml) - содержит переменные
-   - `vector_config_dir` - путь к файлам конфигурации
-	 - `vector_config` - дополнительные параметры конфигурации (пока пустой)
+  - [playbook/roles/vector/defaults/main.yml](playbook/roles/vector/defaults/main.yml) - содержит переменные
+    - `vector_version` - устанавливаемая версия
+  
+  - [playbook/roles/vector/vars/main.yml](playbook/roles/vector/vars/main.yml) - содержит переменные
+    - `vector_config_dir` - путь к файлам конфигурации
+    - `vector_config` - дополнительные параметры конфигурации (пока пустой)
 
 4. Перенести нужные шаблоны конфигов в templates.
 
-_Файл:_ [playbook/roles/vector/templates/vector.yml.j2(playbook/roles/vector/templates/vector.yml.j2) - шаблон файла конфигурации Vector
+_Файл:_ [playbook/roles/vector/templates/vector.yml.j2](playbook/roles/vector/templates/vector.yml.j2) - шаблон файла конфигурации Vector
 
 5. Повторите шаги для LightHouse. Помните, что одна роль должна настраивать один продукт.
 
@@ -57,7 +58,8 @@ ansible-galaxy role init --init-path ./roles/ lighthouse
 ```
 _Измененные файлы:_
   1. [playbook/roles/lighthouse/defaults/main.yml](playbook/roles/lighthouse/defaults/main.yml) - изменяемые параметры роли:
-    - `lighthouse_vcs`: "https://github.com/VKCOM/lighthouse.git"
+    
+    - `lighthouse_vcs` - URL репозитория Lighthouse ('https://github.com/VKCOM/lighthouse.git')
     - `lighthouse_location_dir` - путь установки (`/var/www/lighthouse`)
     - `lighthouse_access_log_name` - название журнала доступа к lighthouse (`lighthouse`)
 
