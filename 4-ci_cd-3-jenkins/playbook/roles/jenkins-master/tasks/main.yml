@@ -1,0 +1,93 @@
+---
+# Настройка репозитория Jenkins
+## Add repo-sign file
+- name: Get repo signature
+  become: true
+  get_url:
+    dest: "/usr/share/keyrings/jenkins-keyring.asc"
+    url: "{{ repo_key }}"
+    validate_certs: false
+    mode: '0644'
+    force: true
+## Add repo key
+# - name: Add Jenkins Repo key
+#   become: true
+#   apt_key:
+#     url: "{{ repo_key }}"
+#     state: present
+## Add repo url
+- name: Add repo Jenkins
+  become: true
+  apt_repository:
+    repo: "{{ repo }}"
+    validate_certs: false
+    state: present
+## Обновление apt
+- name: Update apt-cache
+  become: true
+  apt:
+    update_cache: yes
+    state: latest
+  ignore_errors: yes
+  
+# Установка зависимостей
+## Git
+- include_tasks: dependencies/git.yml
+  tags: [always]
+
+## Epel (only for CentOS)
+- include_tasks: dependencies/epel.yml
+  tags: [always]
+  when: ansible_os_family == 'centos'
+
+## JDK
+- include_tasks: dependencies/jdk.yml
+  tags: [always]
+
+
+
+
+
+# Создание пользователя и группы
+- name: Create group
+  become: true
+  group:
+    name: "{{ user_group }}"
+    state: present
+
+- name: Create user
+  become: true
+  user:
+    name: "{{ user_name }}"
+    generate_ssh_key: true
+  register: ssh_key_info
+
+
+# Установка Jenkins
+- name: Install Jenkins and requirements
+  become: true
+  apt:
+    name: jenkins
+    state: present
+  register: jenkins_installed
+
+
+# Добавление jenkins-agents в known_hosts
+- name: Ensure jenkins agents are present in known_hosts file
+  become: true
+  #become_user: "{{ user_name }}"
+  known_hosts:
+    name: "{{ hostvars[item].ansible_host }}"
+    state: present
+    key: "{{ lookup('pipe', 'ssh-keyscan {{ hostvars[item].ansible_host }}') }}"
+    hash_host: true
+  with_items: "{{ agents }}"
+
+# Запуск Jenkins
+- name: Start Jenkins
+  become: true
+  systemd:
+    name: jenkins
+    state: restarted
+    enabled: true
+  when: jenkins_installed is changed

@@ -1,0 +1,32 @@
+---
+- name: Install Jenkins-master
+  hosts: jenkins_master
+  roles:
+    - jenkins-master
+  vars:
+    agents: "{{ groups.jenkins_agent }}"
+       
+
+- name: Install Jenkins-agents
+  hosts: jenkins_agent
+  roles:
+    - jenkins-agent
+  vars:
+    master: "{{ groups.jenkins_master }}"
+       
+
+
+
+
+# # Добавление jenkins-agents в known_hosts
+# - name: Ensure jenkins agents are present in known_hosts file
+#   become: true
+#   become_user: "{{ user_name }}"
+#   known_hosts:
+#     name: "{{ hostvars[item].ansible_host }}"
+#     state: present
+#     key: "{{ lookup('pipe', 'ssh-keyscan {{ hostvars[item].ansible_host }}') }}"
+#     hash_host: true
+#   with_items: "{{ groups.jenkin_agent }}"
+
+

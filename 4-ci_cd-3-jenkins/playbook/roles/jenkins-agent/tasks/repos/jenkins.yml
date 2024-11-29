@@ -1,0 +1,18 @@
+---
+# Настройка репозитория Jenkins
+## Add repo-sign file
+- name: Get repo signature
+  become: true
+  get_url:
+    dest: "/usr/share/keyrings/jenkins-keyring.asc"
+    url: "{{ repo_key }}"
+    validate_certs: false
+    mode: '0644'
+    force: true
+## Add repo url
+- name: Add repo Jenkins
+  become: true
+  apt_repository:
+    repo: "{{ repo }}"
+    validate_certs: false
+    state: present

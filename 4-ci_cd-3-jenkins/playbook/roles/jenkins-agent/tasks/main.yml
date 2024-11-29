@@ -1,0 +1,108 @@
+---
+# Настройка репозиториев
+## Jenkins
+- include_tasks: repos/jenkins.yml
+  tags: [always]
+## Docker
+- include_tasks: repos/docker.yml
+  tags: [always]
+## Обновление apt
+- name: Update apt-cache
+  become: true
+  apt:
+    update_cache: yes
+    state: latest
+
+# Установка зависимостей
+## Git
+- include_tasks: dependencies/git.yml
+  tags: [always]
+## Epel (only for CentOS)
+- include_tasks: dependencies/epel.yml
+  tags: [always]
+  when: ansible_os_family == 'centos'
+## JDK
+- include_tasks: dependencies/jdk.yml
+  tags: [always]
+## docker-repo
+- include_tasks: dependencies/docker-repo.yml
+  tags: [always]
+## docker
+- include_tasks: dependencies/docker.yml
+  tags: [always]
+
+# Создание пользователя и группы
+- name: Create agent_dir
+  become: true
+  file:
+    path: "{{ agent_dir }}"
+    state: directory
+    owner: "{{ user_name }}"
+    group: "{{ user_group }}"
+
+# Установка Jenkins
+- name: Install Jenkins and requirements
+  become: true
+  apt:
+    name: jenkins
+    state: present
+  register: jenkins_installed
+
+# Добавление ssh-key master-а
+- name: Add master publickey into authorized_key
+  become: true
+  authorized_key:
+    user: "{{ jenkins_user_name }}"
+    state: present
+    key: "{{ hostvars[item]['ssh_key_info']['ssh_public_key'] }}"
+  with_items: "{{ master }}"
+  
+# Установка Ansible
+- name: Install Ansible
+  become_user: root
+  pip:
+    executable: pip3
+    name:
+      - selinux
+      - ansible<3.0
+    state: present
+
+
+- name: Reinstall Selinux
+  become_user: root
+  pip:
+    executable: pip3
+    name:
+      - selinux
+    state: forcereinstall
+
+
+- name: Add local to PATH
+  lineinfile:
+    dest: ~/.bashrc
+    regexp: export PATH=$PATH:/home/jenkins/.local/bin
+    line: export PATH=$PATH:/home/jenkins/.local/bin
+
+
+- name: Add jenkinsuser to dockergroup
+  become_user: root
+  user:
+    name: "{{ jenkins_user_name }}"
+    groups: docker
+
+- name: Restart docker
+  become_user: root
+  systemd:
+    name: docker
+    state: restarted
+    enabled: true
+
+- name: Install agent.jar
+  get_url:
+    url: "http://{{ hostvars['jenkins-master-01']['ansible_host'] }}:8080/jnlpJars/agent.jar"
+    dest: "{{ jenkins_agent_dir }}"
+  register: install_agent
+  until: install_agent is succeeded
+  retries: 10
+  timeout: 10
+  

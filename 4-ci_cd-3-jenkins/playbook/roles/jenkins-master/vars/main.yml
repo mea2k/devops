@@ -1,0 +1,6 @@
+---
+# vars file for jenkins
+user_group: jenkins
+user_name: jenkins
+
+repo: "deb  [signed-by=/usr/share/keyrings/jenkins-keyring.asc] {{ repo_url }} binary/"
