@@ -32,6 +32,20 @@
   tags: [always]
 
 # Создание пользователя и группы
+## Создание группы
+- name: Create group
+  become: true
+  group:
+    name: "{{ user_group }}"
+    state: present
+## Создание пользователя
+- name: Create user
+  become: true
+  user:
+    name: "{{ user_name }}"
+    generate_ssh_key: true
+  register: ssh_key_info
+## Создание папки агента
 - name: Create agent_dir
   become: true
   file:
