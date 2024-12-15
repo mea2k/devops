@@ -1,0 +1,9 @@
+[Unit]
+Description=Python script for getting monitor metrics
+After=network.target
+[Service]
+ExecStart=/usr/bin/python3 /var/opt/pymonitor/main.py
+User=root
+Restart=no
+[Install]
+WantedBy=multi-user.target
