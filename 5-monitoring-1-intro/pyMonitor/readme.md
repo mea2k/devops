@@ -120,4 +120,4 @@ sudo systemctl status pymonitor
 
 # Copyright
 
-Copyright (c) DJ Eugene aka mea2k, 2024
+Copyright (c) DJ Eugene aka [mea2k](https://github.com/mea2k/devops), 2024
