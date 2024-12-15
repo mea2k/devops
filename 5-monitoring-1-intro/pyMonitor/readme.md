@@ -4,7 +4,8 @@
 
 Программа написана на языке программирования Python3.
 
-__Требуемые библиотеки__
+__Требуемые библиотеки:__
+
 `os` - для доступа к файлам и каталогам журналов
 
 `errno` - для отлова ошибок при доступе к файловой системе
@@ -43,11 +44,11 @@ __Требуемые библиотеки__
 
   - _cpustat_ ([cpustat/main.py](cpustat/main.py))
   
-	- _loadavg_ ([loadavg/main.py](loadavg/main.py))
+  - _loadavg_ ([loadavg/main.py](loadavg/main.py))
 
-	- _meminfo_ ([meminfo/main.py](meminfo/main.py))
+  - _meminfo_ ([meminfo/main.py](meminfo/main.py))
 
-	- _uptime_ ([uptime/main.py](uptime/main.py))
+  - _uptime_ ([uptime/main.py](uptime/main.py))
 
 
 ## Формат журнала
@@ -63,12 +64,12 @@ __Требуемые библиотеки__
 __Формат JSON_data:__
 ```
 {
-		'time': дата и время в ISO-формате (string),
-  	'timestamp': временная метка в UNIX-формате (int),
-    'cpu_data': данные метрик по использованию CPU (из модуля cpustat),
-		'uptime': данные метрик по работе системы (из модуля uptime),
-		'loadavg': данные метрик по средней загрузке и простою CPU (из модуля loadavg),
-		'meminfo': данные метрик по использованию оперативной памяти (из модуля meminfo)
+	'time':			дата и время в ISO-формате (string),
+	'timestamp':	временная метка в UNIX-формате (int),
+	'cpu_data':		данные метрик по использованию CPU (из модуля cpustat),
+	'uptime':		данные метрик по работе системы (из модуля uptime),
+	'loadavg':		данные метрик по средней загрузке и простою CPU (из модуля loadavg),
+	'meminfo':		данные метрик по использованию оперативной памяти (из модуля meminfo)
 }
 ```
 
@@ -117,53 +118,6 @@ sudo systemctl status pymonitor
 
 	
 
-	## Copyright
+# Copyright
 
-	Copyright (c) DJ Eugene aka mea2k, 2024
-	
-	
-	
-	
-
-
-
-
-Суммировав всё, вы спроектировали приложение, которое:
-
-является python3-скриптом;
-
-собирает метрики из папки /proc;
-
-складывает метрики в файл 'YY-MM-DD-awesome-monitoring.log' в директорию /var/log (YY — год, MM — месяц, DD — день);
-
-каждый сбор метрик складывается в виде json-строки, в виде:
-
-timestamp — временная метка, int, unixtimestamp;
-
-metric_1 — метрика 1;
-
-metric_2 — метрика 2;
-
-...
-
-metric_N — метрика N.
-
-сбор метрик происходит каждую минуту по cron-расписанию.
-
-Для успешного выполнения задания нужно привести:
-
-работающий код python3-скрипта;
-конфигурацию cron-расписания;
-пример верно сформированного 'YY-MM-DD-awesome-monitoring.log', имеющий не меньше пяти записей.
-Дополнительная информация:
-
-Количество собираемых метрик должно быть не меньше четырёх.
-По желанию можно не ограничивать себя только сбором метрик из /proc.
-
-
-
-
-
-# ЗАДАНИЕ
-
-[https://github.com/netology-code/mnt-homeworks/tree/MNT-video/10-monitoring-01-base](https://github.com/netology-code/mnt-homeworks/tree/MNT-video/10-monitoring-01-base)
+Copyright (c) DJ Eugene aka mea2k, 2024
