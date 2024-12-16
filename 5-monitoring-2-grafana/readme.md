@@ -91,7 +91,7 @@ d6d5ad27b3ce   prom/node-exporter:latest   "/bin/node_exporter …"   About an h
 ![Уведомление для CPU Utilization](grafana_alert_cpu.png)
 
 Результат работы уведомления:
-![Результат работы уведомления](grafana_alert_cpu_result.png.png)
+![Результат работы уведомления](grafana_alert_cpu_result.png)
 
 
 2. Правило для `FS available (bytes)` - _уведомление, если свободного места меньше 4,8 Гб_
