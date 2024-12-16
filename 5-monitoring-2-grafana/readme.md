@@ -44,7 +44,7 @@ d6d5ad27b3ce   prom/node-exporter:latest   "/bin/node_exporter …"   About an h
 
 Для настройки Grafana были выполнены следующие шаги.
 
-1. Запуск в браузере по пути http://<localIP>:3000
+1. Запуск в браузере по пути http://\<localIP\>:3000
 
 2. Смена пароля (по умолчанию, `admin/admin`)
 
