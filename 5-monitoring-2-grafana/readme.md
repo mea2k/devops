@@ -107,6 +107,15 @@ d6d5ad27b3ce   prom/node-exporter:latest   "/bin/node_exporter …"   About an h
 
 [https://dockerhosting.ru/blog/zapusk-prometheus-v-docker/](https://dockerhosting.ru/blog/zapusk-prometheus-v-docker/)
 
+[Основы мониторинга (обзор Prometheus и Grafana) - habr](https://habr.com/ru/articles/709204/)
+
+[Мониторинг докер-хостов, контейнеров и контейнерных служб - habr](https://habr.com/ru/companies/slurm/articles/314212/)
+
+[Collect Docker metrics with Prometheus](https://docs.docker.com/engine/daemon/prometheus/)
+
+[Prometheus + Grafana + Alertmanager в Docker](https://www.dmosk.ru/miniinstruktions.php?mini=prometheus-stack-docker&ysclid=m4rj2dyizt291772568)
+
+[How to Set Up Prometheus for Docker [Step-by-Step Guide]](https://uptrace.dev/blog/prometheus-for-docker.html)
 
 
 # Задание
