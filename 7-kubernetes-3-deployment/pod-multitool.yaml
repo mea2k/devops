@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multitool
+  labels:
+    app: multitool
+spec:
+  containers:
+    - name: multitool
+      image: wbitt/network-multitool:latest
+      command:
+        - /bin/sh
+        - -c
+        - >
+          sleep infinity;
