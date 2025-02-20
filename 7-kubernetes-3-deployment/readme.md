@@ -29,6 +29,7 @@
 	```
 
 	Результат:
+
 	![Запуск контейнеров в рамках deployment](images/kubecl_deployment_01.png)
 
 2. Изменение числа реплик в файле [deployment.yaml](deployment.yaml#L6) на 3.
@@ -48,22 +49,24 @@
 
 5. Результат создания сервиса
 
-	Команда
+	Команда:
 	
 	```
 	kubectl get service
 	```
 
 	Результат:
+
 	![Запуск service](images/kubecl_service_01.png)
 
-	Команда
+	Команда:
 	
 	```
 	kubectl describe service nginx-multitool-svc
 	```
 
 	Результат:
+
 	![Запуск service](images/kubecl_service_02.png)
 
 	
@@ -76,6 +79,7 @@
 	```
 
 	Результат:
+	
 	![Запуск Pod-а multitool](images/kubecl_multitool_01.png)
 
 
@@ -89,6 +93,7 @@
 	Для проверки доступности внутри Pod-а выполняем команду `curl nginx-multitool-svc`
 
 	Результат:
+	
 	![Результат проверки доступности серсива из Pod-а](images/kubecl_multitool_exec_01.png)
 
 
