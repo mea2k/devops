@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: multitool
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: backend-html
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: backend-html
+          configMap:
+            name: backend-html
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-html
+data: 
+  index.html: |
+    <html>
+      <head>
+        <title>This is BACKEND!</title>
+      </head>
+      <body>
+        <h1>Backend</h1>
+        <h2>api</h2>
+      </body>
+    </html>
+  
