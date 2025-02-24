@@ -14,27 +14,142 @@
 
 ### Задание 1 
 
-**Что нужно сделать**
+1. Deployment _shared-app_: файл - [deployment-shared-app.yaml](deployment-shared-app.yaml):
+	
+	- имя: `shared-data-app`
+	
+	- количество реплик: `1`
 
-Создать Deployment приложения, состоящего из двух контейнеров и обменивающихся данными.
+	- фильтр на метки: `app: shared-data`
 
-1. Создать Deployment приложения, состоящего из контейнеров busybox и multitool.
-2. Сделать так, чтобы busybox писал каждые пять секунд в некий файл в общей директории.
-3. Обеспечить возможность чтения файла контейнером multitool.
-4. Продемонстрировать, что multitool может читать файл, который периодоически обновляется.
-5. Предоставить манифесты Deployment в решении, а также скриншоты или вывод команды из п. 4.
+	- контейнеры: `busybox`, `multitool`
+
+	- volume: `shared-data-volume` (тип emptyDir), монтирован в папку `/data/` на обоих контейнерах
+
+2. Особенности контейнеров:
+	
+	а) `busybox` каждые 5 сек пишет в файл `/data/shared.txt` строку "$(date) - Data written by busybox"
+
+	Исполняемый контейнером код (bash):
+	```
+	while true;
+		do echo "$(date) - Data written by busybox" >> /data/shared.txt;
+		sleep 5;
+	done;
+	```
+
+	b) `multitool` каждые 1 сек считывает содержимое файла `/data/shared.txt`
+
+	Исполняемый контейнером код (bash):
+	```
+	while true;
+		do cat /data/shared.txt;
+		sleep 1;
+	done;
+	```
+
+3. Результаты запуска
+
+	Команда:
+	```
+	kubectl apply -f deployment-shared-app.yaml
+	```
+
+	Результаты запуска deployment:
+
+	![Запущенный deployment](images/shared_deploy_01.png)
+
+	![Запущенный pod](images/shared_po_01.png)
+
+4. Демонстрация работы контейнеров
+
+	1. Чтение содержимого файла из контейнера `busybox`
+
+		Команда:
+		```
+		kubectl exec -it shared-data-app-7c7df69579-wjvx5 -c busybox -- sh
+		```
+
+		Результат:
+
+		![Чтение содержимого файла из контейнера busybox](images/shared_busybox_01.png)
+	
+	2. Чтение содержимого файла из контейнера `multitool`
+
+		Команда:
+		```
+		kubectl exec -it shared-data-app-7c7df69579-wjvx5 -c multitool -- sh
+		```
+
+		Результат:
+
+		![Чтение содержимого файла из контейнера multitool](images/shared_multitool_01.png)
 
 
 ### Задание 2
 
-**Что нужно сделать**
+1. Daemonset _host-log-reader_: файл - [daemonset-logreader.yaml](daemonset-logreader.yaml):
+	
+	- имя: `host-log-reader`
+	
+	- количество реплик: _по умолчанию по 1 реплики на каждом узле кластера_
 
-Создать DaemonSet приложения, которое может прочитать логи ноды.
+	- фильтр на метки: `app: host-log-reader`
 
-1. Создать DaemonSet приложения, состоящего из multitool.
-2. Обеспечить возможность чтения файла `/var/log/syslog` кластера MicroK8S.
-3. Продемонстрировать возможность чтения файла изнутри пода.
-4. Предоставить манифесты Deployment, а также скриншоты или вывод команды из п. 2.
+	- контейнеры: `multitool`
+
+	- volume: `log-volume` (тип hostPath), монтирован в папку `/logs/`, только для чтения, использует локальную папку узла `/var/logs/`
+
+2. Особенности контейнера `multitool`
+
+	Каждые 10 сек считывает содержимое файла `/logs/syslog`
+
+	Исполняемый контейнером код (bash):
+	```
+	while true;
+		do cat /logs/syslog;
+		sleep 10;
+	done;
+	```
+
+3. Результаты запуска
+
+	Команда:
+	```
+	kubectl apply -f daemonset-logreader.yaml
+	```
+
+	Результаты запуска deployment:
+
+	![Запущенный daemonset](images/logreader_ds_01.png)
+
+	![Запущенный pod](images/logreader_po_01.png)
+
+4. Демонстрация работы контейнера
+
+	1. Чтение содержимого каталога `/logs/` из контейнера `multitool` в `host-log-reader`
+
+		Команда:
+
+		```
+		kubectl exec -it host-log-reader-vvdvb -- sh
+		```
+
+		Результат:
+
+		![Чтение содержимого каталога /logs](images/logreader_logs_01.png)
+	
+	2. Чтение содержимого каталога `/var/logs/` на ВМ cluster
+
+		Команда:
+		```
+		ls -la /var/logs
+		```
+
+		Результат:
+
+		![Чтение содержимого каталога /var/logs](images/cluster_logs_01.png)
+
 
 
 ## Инструменты и дополнительные материалы, которые пригодятся для выполнения задания
