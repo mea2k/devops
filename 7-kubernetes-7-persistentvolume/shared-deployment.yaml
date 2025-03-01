@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shared-data-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shared-data
+  template:
+    metadata:
+      labels:
+        app: shared-data
+    spec:
+      volumes:
+        - name: shared-data-volume
+          persistentVolumeClaim:
+            claimName: local-pvc
+      containers:
+        - name: busybox
+          image: busybox:latest
+          command:
+            - /bin/sh
+            - -c
+            - >
+              while true;
+              do echo "$(date) - Data written by busybox" >> /data/shared.txt;
+              sleep 5;
+              done;
+          volumeMounts:
+            - name: shared-data-volume
+              mountPath: /data
+        - name: multitool
+          image: wbitt/network-multitool:latest
+          command:
+            - /bin/sh
+            - -c
+            - >
+              while true;
+              do cat /data/shared.txt;
+              sleep 5;
+              done;
+          volumeMounts:
+            - name: shared-data-volume
+              mountPath: /data

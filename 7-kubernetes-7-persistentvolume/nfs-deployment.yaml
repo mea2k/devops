@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nfs-data-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shared-data
+  template:
+    metadata:
+      labels:
+        app: shared-data
+    spec:
+      volumes:
+        - name: nfs-data-volume
+          persistentVolumeClaim:
+            claimName: nfs-pvc
+      containers:
+        - name: multitool
+          image: wbitt/network-multitool:latest
+          command:
+            - /bin/sh
+            - -c
+            - >
+              while true;
+              do echo "$(date) - Data written by multitool" >> /data/nfs-shared.txt;
+              sleep 5;
+              done;
+          volumeMounts:
+            - name: nfs-data-volume
+              mountPath: /data
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "microk8s-hostpath"
+  resources:
+    requests:
+      storage: 1Gi
