@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  index.html: |
+    <html>
+    <head>
+      <title>Application Configuration</title>
+    </head>
+    <body>
+      <h1>Homework netology 2.3 for the lesson "Application Configuration"</h1>
+      <h2>Hello from Nginx!</h2>
+    </body>
+    </html>
