@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "my-chart.fullname" . }}-deployment
+  labels:
+    {{- include "my-chart.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "my-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "my-chart.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      containers:
+      {{- range $container := $.Values.containers }}
+        - name: {{ include "my-chart.fullname" $ }}-{{ $container.name }}
+          image: {{ $container.image.name }}:{{ $container.image.tag | default $.Chart.AppVersion | default "latest" }}
+          imagePullPolicy: {{ $container.pullPolicy }}
+          ports:
+          - containerPort: {{ $container.port }}
+        {{- with $container.env }}
+          env:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with $container.volumeMounts }}
+          volumeMounts:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+      {{- end }}
+  
+      {{- with .Values.volumes }}
+      volumes:
+      {{- range $volume := $.Values.volumes }}
+        - name: {{ $volume.name}}
+          data:
+          {{ if $volume.data.configMap }}
+            configMap:
+              name: {{ include "my-chart.fullname" $ }}-{{ $volume.data.configMap }}
+          {{ else }}
+            {{- toYaml $volume.data | nindent 10 }}
+          {{ end }}
+      {{- end }}
+      {{- end }}

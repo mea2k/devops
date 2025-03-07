@@ -1,0 +1,13 @@
+{{- range $configMap := .Values.configMaps }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "my-chart.fullname" $ }}-{{ $configMap.name }}
+  labels:
+    {{- include "my-chart.labels" $ | nindent 4 }}
+  data:
+  {{- range $key, $value := $configMap.data }}
+    {{- toYaml (printf "%s: %s" $key $value) | indent 4 }}
+  {{- end }}
+---
+{{- end }}

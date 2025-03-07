@@ -1,0 +1,119 @@
+#################################################
+###            GENERAL PARAMETERS             ###
+#################################################
+
+replicaCount: 1
+nameOverride: ""
+fullnameOverride: ""
+
+
+#################################################
+###              POD PARAMETERS               ###
+#################################################
+
+# podLabels: {
+#   app: my-app
+# }
+
+containers: 
+  - name: nginx
+    image: 
+      name: nginx
+      tag: "latest"
+    pullPolicy: IfNotPresent
+    port: 80
+    volumeMounts:
+      - name: "nginx-html-volume"
+        mountPath: "/usr/share/nginx/html"
+  - name: multitool
+    image: 
+      name: wbitt/network-multitool
+      tag: latest
+    pullPolicy: IfNotPresent
+    port: 8080
+    env:
+      - name: "HTTP_PORT"
+        value: "8080"
+
+
+#################################################
+###            SERVICE PARAMETERS             ###
+#################################################
+
+service:
+  type: NodePort
+  ports:
+    - port: 80
+      nodePort: 32001
+      protocol: tcp
+      name: "http"
+    - port: 8080
+      nodePort: 32101
+      protocol: tcp
+      name: "http2"
+
+
+#################################################
+###            INGRESS PARAMETERS             ###
+#################################################
+
+ingress:
+  enabled: false
+  className: ""
+  annotations:
+    spec.ingressClassName: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: my-chart.local
+      paths:
+        - path: /
+          pathType: Prefix
+          port: 80
+  # tls:
+  #   - secretName: my-chart-tls
+  #     hosts:
+  #       - my-chart.local
+
+
+#################################################
+###              LIVENESS PROBE               ###
+#################################################
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+
+
+#################################################
+###            VOLUMES PARAMETERS             ###
+#################################################
+
+volumes:
+  - name: nginx-html-volume
+    data:
+      configMap:
+        name: nginx-configmap
+
+
+#################################################
+###           CONFIGMAP PARAMETERS            ###
+#################################################
+configMaps: 
+  - name: nginx-configmap
+    data: 
+      index.html: |
+        <html>
+        <head>
+          <title>Application Configuration</title>
+        </head>
+        <body>
+          <h1>Homework netology 2.5 for the lesson \"HELM\"</h1>
+          <h2>Hello from My-chart!</h2>
+        </body>
+        </html>
