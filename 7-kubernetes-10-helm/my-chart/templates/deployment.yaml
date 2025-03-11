@@ -42,12 +42,11 @@ spec:
       volumes:
       {{- range $volume := $.Values.volumes }}
         - name: {{ $volume.name}}
-          data:
-          {{ if $volume.data.configMap }}
-            configMap:
-              name: {{ include "my-chart.fullname" $ }}-{{ $volume.data.configMap }}
-          {{ else }}
-            {{- toYaml $volume.data | nindent 10 }}
-          {{ end }}
+        {{ if $volume.data.configMap }}
+          configMap:
+            name: {{ include "my-chart.fullname" $ }}-{{ $volume.data.configMap.name }}
+        {{ else }}
+          {{- toYaml $volume.data | nindent 10 }}
+        {{ end }}
       {{- end }}
       {{- end }}

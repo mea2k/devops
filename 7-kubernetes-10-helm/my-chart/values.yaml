@@ -107,8 +107,7 @@ volumes:
 configMaps: 
   - name: nginx-configmap
     data: 
-      index.html: |
-        <html>
+      index.html: <html>
         <head>
           <title>Application Configuration</title>
         </head>

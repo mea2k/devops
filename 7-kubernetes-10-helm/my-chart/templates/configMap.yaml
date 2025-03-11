@@ -5,9 +5,10 @@ metadata:
   name: {{ include "my-chart.fullname" $ }}-{{ $configMap.name }}
   labels:
     {{- include "my-chart.labels" $ | nindent 4 }}
-  data:
-  {{- range $key, $value := $configMap.data }}
-    {{- toYaml (printf "%s: %s" $key $value) | indent 4 }}
+data:
+{{- range $key, $value := $configMap.data }}
+  {{ $key}}:
+    {{- toYaml $value | indent 4}}
   {{- end }}
 ---
 {{- end }}

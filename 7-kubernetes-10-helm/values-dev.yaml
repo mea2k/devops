@@ -58,7 +58,7 @@ service:
 #################################################
 
 ingress:
-  enabled: false
+  enabled: true
   className: ""
   annotations:
     spec.ingressClassName: nginx
@@ -107,13 +107,12 @@ volumes:
 configMaps: 
   - name: nginx-configmap
     data: 
-      index.html: |
-        <html>
+      index.html: <html>
         <head>
-          <title>Application Configuration</title>
+          <title>DEV - Application Configuration</title>
         </head>
         <body>
-          <h1>Homework netology 2.5 for the lesson \"HELM\"</h1>
+          <h1>Homework netology 2.5 for the lesson "HELM"</h1>
           <h2>Hello from My-chart!</h2>
         </body>
         </html>
