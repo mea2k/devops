@@ -113,7 +113,7 @@ variable "vms_resources" {
     hdd_size : number,
     hdd_type : string,
     enable_nat : bool,
-    ip_address: string,
+    ip_address : string,
   }))
   description = "{platform_id=<STRING>, cores=<NUMBER>, memory=<NUMBER>, core_fraction=<NUMBER>, vm_db_preemptible: <BOOL>, hdd_size=<NUMBER>, hdd_type=<STRING>, enable_nat: <BOOL>}"
   default = {
@@ -126,7 +126,7 @@ variable "vms_resources" {
       hdd_size      = 10
       hdd_type      = "network-hdd"
       enable_nat    = true,
-      ip_address  = ""
+      ip_address    = ""
     },
   }
 }

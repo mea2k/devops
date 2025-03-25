@@ -31,7 +31,7 @@ resource "yandex_vpc_route_table" "nat_route" {
 # NAT-instance
 ## Образ загрузочного диска
 data "yandex_compute_image" "nat_boot" {
-  family    = var.vm_nat_os_family
+  family = var.vm_nat_os_family
 }
 ## VM-NAT
 resource "yandex_compute_instance" "nat_instance" {
@@ -58,23 +58,23 @@ resource "yandex_compute_instance" "nat_instance" {
     preemptible = var.vms_resources["nat"].preemptible
   }
   network_interface {
-    subnet_id = yandex_vpc_subnet.public.id
-    ip_address = var.vms_resources["nat"].ip_address 
-    nat       = var.vms_resources["nat"].enable_nat
+    subnet_id  = yandex_vpc_subnet.public.id
+    ip_address = var.vms_resources["nat"].ip_address
+    nat        = var.vms_resources["nat"].enable_nat
   }
 
   # metadata = {
   #   serial-port-enable = local.vms_metadata.serial_port_enable #1
   #   ssh-keys           = local.vms_metadata.ssh_keys[0]        #"ubuntu:${var.vms_ssh_root_key}"
   # }
-  metadata = local.vms_metadata_public_image 
+  metadata = local.vms_metadata_public_image
 }
 
 
 # Описание ВМ
 ## Образ загрузочного диска
 data "yandex_compute_image" "boot" {
-  family    = var.vm_os_family
+  family = var.vm_os_family
 }
 ## ВМ типа "server" (см. variables.tf) в PUBLIC
 resource "yandex_compute_instance" "vm_public_server" {
