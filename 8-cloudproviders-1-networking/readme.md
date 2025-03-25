@@ -26,6 +26,43 @@
  - Создать route table. Добавить статический маршрут, направляющий весь исходящий трафик private сети в NAT-инстанс.
  - Создать в этой приватной подсети виртуалку с внутренним IP, подключиться к ней через виртуалку, созданную ранее, и убедиться, что есть доступ к интернету.
 
+__Результаты:__
+
+1. Результат выполнения команды `terraform -chdir=./terraform apply`
+
+	![Создание инфраструктуры](images/terraform01.png)
+
+	Тот же результат из Яндекс.Консоли
+
+	![Создание инфраструктуры](images/cloud01.png)
+
+2. Проверка доступа в сеть Интернет
+
+	- из _ВМ NAT_:
+
+	```
+	ssh -o 'StrictHostKeyChecking=no' user@84.201.133.155
+	# ping 8.8.8.8
+	# ping 192.168.20.12
+	
+	```
+
+	![Доступ в сеть Интернет из ВМ NAT](images/ping-nat-ext.png)
+
+
+	![Доступ к PRIVATE подсети](images/ping-nat-int.png)
+
+	- из _ВМ PUBLIC_:
+
+	```
+	ssh -o 'StrictHostKeyChecking=no' user@51.250.76.69
+	# ping 8.8.8.8
+	```
+
+	![Доступ в сеть Интернет из ВМ PUBLIC](images/ping-public-ext.png)
+
+
+
 ------
 
 ### Задание 2. AWS* (задание со звёздочкой)
@@ -62,7 +99,7 @@
 [Compute Instance](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/compute_instance)
 
 
-------
+------ 
 
 # Задание
 
