@@ -51,6 +51,62 @@ echo "<html><h1>My cool web-server</h1></html>" > index.html
 
 __Результаты:__
 
+1. Структура проекта:
+    
+    [terraform/variables.tf](terraform/variables.tf) - используемые переменные
+
+    [terraform/variables.auto.tfvars](terraform/variables.auto.tfvars) - подставляемые переменные
+
+    [terraform/main.tf](terraform/main.tf) - основной файл с описанием всех ресурсов
+
+    [terraform/outputs.tf](terraform/outputs.tf) - выводимый на экран результат после создания всех ресурсов
+    
+1. Создание инфраструктуры
+
+    Команда:
+    ```
+    terraform -chdir=./terraform apply
+    ```
+
+    Результат:
+
+    ![Вывод команды terraform](images/terraform-output-01.png)
+
+
+    Созданные объекты:
+
+    ![Созданные в Yandex Cloud объекты](images/yandex-cloud-summary.png)
+
+    ВМ:
+
+    ![Созданные ВМ](images/vms-01.png)
+
+    Группа ВМ:
+
+    ![Созданная группа ВМ](images/vm-group-01.png)
+
+    Объекты в хранилище (`buckets`):
+
+    ![Buckets](images/bucket-01.png)
+
+    ![Buckets](images/bucket-02.png)
+
+2. Доступ к созданным ресурсам
+
+    1. Доступ к ВМ через публичные IP-адреса:
+
+        ![Доступ к ВМ через публичные IP-адреса](images/vm-web-01.png)
+
+    2. Доступ к ВМ через сетевой балансировщик (`network-balancer`)
+
+        ![Доступ к ВМ через network-balancer](images/network-balancer-01.png)
+
+    3. Доступ к ВМ через балансировщик уровня приложения (`application-balancer`)
+
+        ![Доступ к ВМ через application-balancer](images/application-balancer-01.png)
+
+
+
 ------
 
 ### Задание 2. AWS* (задание со звёздочкой)
