@@ -18,6 +18,55 @@
 
 __Результаты:__
 
+1. Структура проекта:
+    
+    [terraform/variables.tf](terraform/variables.tf) - используемые переменные
+
+    [terraform/variables.auto.tfvars](terraform/variables.auto.tfvars) - подставляемые переменные
+
+    [terraform/main.tf](terraform/main.tf) - основной файл с описанием всех ресурсов
+
+    [terraform/outputs.tf](terraform/outputs.tf) - выводимый на экран результат после создания всех ресурсов
+    
+    [data](data/) - папка с данными, загружаемыми в Object Storage
+
+
+2. Создание инфраструктуры
+
+    1. Создание файлов сертификата (.crt) и ключа (.key) для домена `example.com`
+
+		  ```
+		  openssl req -x509 -nodes -newkey rsa:2048 -keyout keys/tls.key -out keys/tls.crt -subj "/CN=example.com/O=example.com"
+    	```
+
+		  _Результат:_ в папке `keys` создаются файлы `keys/tls.key` и `keys/tls.crt`.
+
+
+    2. Копирование содержимого ключей в переменные `cert_certificate` и `cert_private_key` ([terraform/variables.tf](terraform/variables.tf#L106))
+      
+        _Как правило, это делают в файле `secret.auto.tfvars`._
+
+
+    3. Создание инфраструктуры
+    
+        Команда:
+        ```
+        terraform -chdir=./terraform apply
+        ```
+
+        Результат:
+
+        ![Вывод команды terraform](images/terraform-01.png)
+
+
+        Созданные объекты:
+
+        ![Созданные в Yandex Cloud объекты](images/buckets-01.png)
+
+
+    4. Проверка доступа по HTTPS к static-web
+    
+        ![Доступ к web-странице по HTTPS](images/bucket-web-01.png)
 
 
 ------
