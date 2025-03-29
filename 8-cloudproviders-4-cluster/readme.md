@@ -27,6 +27,90 @@
 
 __Результаты:__
 
+1. Структура проекта
+    
+    - [terraform/variables.tf](terraform/variables.tf) - используемые переменные
+
+    - [terraform/variables.auto.tfvars](terraform/variables.auto.tfvars) - подставляемые переменные
+
+    - [terraform/main.tf](terraform/main.tf) - основной файл с описанием всех ресурсов
+
+    - [terraform/outputs.tf](terraform/outputs.tf) - выводимый на экран результат после создания всех ресурсов
+
+    В файле [terraform/main.tf](terraform/main.tf) описаны следующие типы ресурсов _(имена и параметры всех объектов задаются в переменных [terraform/variables.auto.tfvars](terraform/variables.auto.tfvars))_:
+
+      1. Основные сетевые ресурсы
+      
+          - сеть `vpc`
+
+          - 3 подсети [`public`](terraform/main.tf#L10) в разных зонах доступности: `["192.168.11.0/24", "192.168.12.0/24", "192.168.13.0/24"]`
+          
+          - 3 подсети [`private`](terraform/main.tf#L21) в разных зонах доступности: `["192.168.201.0/24", "192.168.202.0/24", "192.168.203.0/24"]`
+
+      2. Кластер MySQL
+      
+          - группа безопасности для задания правил сетевого трафика [`mysql_sg`](terraform/main.tf#L34)
+          
+          - сам кластер [`mysql_cluster`](terraform/main.tf#L51) в подсети `private` с именем `mysql-cluster`
+          
+          - БД [`mysql_db`](terraform/main.tf#L92) с именем `netology_db`
+          
+          - пользователь БД [`mysql_user`](terraform/main.tf#L97) с именем `user` и паролем
+
+      3. Региональный кластер Kubernetes
+
+          - сервисный аккаунт Yandex для управления кластером [`k8s_sa`](terraform/main.tf#L113) с именем `k8s-service-account` и назначенными ролями `editor`, `k8s.clusters.agent`, `vpc.publicAdmin`, `container-registry.images.puller`, `kms.keys.encrypterDecrypter`
+
+          - ключ Yandex Key Management Service [`kms-key`](terraform/main.tf#L153)
+
+          - группа безопасности для задания правил сетевого трафика кластера [`k8s_sg`](terraform/main.tf#L168)
+          
+          - сам кластер [`regional_cluster`](terraform/main.tf#L214) с именем `k8s-regional-cluster` с 3-мя мастерами во всех зонах доступности в подсетях `public`
+
+          - 3 группы узлов [`node_group`](terraform/main.tf#L260) в каждой зоне доступности с 1 узлом и динамическим масштабированием до 2-х узлов в каждой группе
+
+
+
+2. Создание инфраструктуры
+
+    Команда:
+    ```
+    terraform -chdir=./terraform apply
+    ```
+
+    Результат:
+
+    ![Вывод команды terraform](images/terraform-output-01.png)
+
+
+    Созданные объекты:
+
+    ![Созданные в Yandex Cloud объекты](images/yandex-cloud-summary.png)
+
+    Подсети private и public:
+
+    ![Созданные подсети](images/subnets-01.png)
+    
+    Сервисный аккаунт:
+
+    ![Созданные сервисные аккаунты](images/service-accounts-01.png)
+
+    MySQL-кластер:
+
+    ![Созданные ВМ](images/vms-01.png)
+
+    Kuberneytes-кластер:
+
+    ![Созданный кластер Kubernetes](images/k8s-cluster-01.png)
+
+    Группы узлов в кластере:
+
+    ![Созданные группы узлов](images/k8s-node-groups-01.png)
+
+
+
+
+
 ------
 
 ## Задание 2*. Вариант с AWS (задание со звёздочкой)
