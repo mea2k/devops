@@ -242,8 +242,28 @@ variable "vms_resources" {
       enable_nat    = true,
       ip_address    = ""
     },
+    "nat" = {
+      platform_id   = "standard-v3"
+      cores         = 2
+      memory        = 1
+      core_fraction = 20
+      preemptible   = true
+      hdd_size      = 10
+      hdd_type      = "network-hdd"
+      enable_nat    = true
+      ip_address    = ""
+    },
   }
 }
+
+
+variable "vm_nat_os_family" {
+  type        = string
+  description = "OS family for NAT from Yandex.CLoud ('yc compute image list --folder-id standard-images')"
+  default     = "nat-instance-ubuntu"
+}
+
+
 
 #######################################
 # SSH vars

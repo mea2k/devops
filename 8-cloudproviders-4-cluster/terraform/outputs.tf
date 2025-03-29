@@ -14,10 +14,6 @@ output "Kubernetes_Nodegroups_status" {
   value = yandex_kubernetes_node_group.node_group.*.status
 }
 
-# output "Kubernetes_Nodes" {
-#   value= [for s in yandex_kubernetes_node_group.node_group: {
-#     external = "${s.instances.*.network_interface[0].nat_ip_address}",
-#     internal = "${s.instances.*.network_interface[0].ip_address}",
-#   }]
-# }
-
+output "phpmyadmin_ip" {
+  value = kubernetes_service.phpmyadmin.status.0.load_balancer.0.ingress.0.ip
+}

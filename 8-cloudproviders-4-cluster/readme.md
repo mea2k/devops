@@ -67,7 +67,17 @@ __Результаты:__
           
           - сам кластер [`regional_cluster`](terraform/main.tf#L214) с именем `k8s-regional-cluster` с 3-мя мастерами во всех зонах доступности в подсетях `public`
 
-          - 3 группы узлов [`node_group`](terraform/main.tf#L260) в каждой зоне доступности с 1 узлом и динамическим масштабированием до 2-х узлов в каждой группе
+          - 3 группы узлов [`node_group`](terraform/main.tf#L261) в каждой зоне доступности с 1 узлом и динамическим масштабированием до 2-х узлов в каждой группе
+
+      4. Настройка kubectl
+
+          - создание конфигурационного файла [`kubeconfig`](terraform/main.tf#L315) с именем `kubeconfig.yaml` на основе шаблона [kubernetes/kubeconfig.tpl](kubernetes/kubeconfig.tpl)
+
+      5. Сервис _phpmyadmin_
+
+          - deployment - структура приложения [`phpmyadmin`](terraform/main.tf#L333)
+
+          - сервис приложения [`phpmyadmin`](terraform/main.tf#L381) типа `"LoadBalancer"`
 
 
 
@@ -108,7 +118,25 @@ __Результаты:__
     ![Созданные группы узлов](images/k8s-node-groups-01.png)
 
 
+3. Подключение к Kubernetes-кластеру
 
+    1. Добавление контекста нового кластера
+
+        ```
+        yc managed-kubernetes cluster get-credentials --name k8s-regional-cluster --internal
+        ```
+    
+    2. Просмотр доступных контекстов и выбор контекста по умолчанию
+
+        ```
+        kubectl config get-contexts
+        kubectl config use-context yc-k8s-regional-cluster
+        ```
+
+        ![Доступные контексты кластера](images/kunectl-context-01.png)
+
+
+      
 
 
 ------

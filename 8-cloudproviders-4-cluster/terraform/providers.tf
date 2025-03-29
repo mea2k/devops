@@ -14,3 +14,11 @@ provider "yandex" {
   folder_id = var.folder_id
   zone      = var.default_zone
 }
+
+provider "kubernetes" {
+  config_path = "${path.module}/../kubernetes/kubeconfig.yaml"
+
+}
+
+provider "local" {}
+

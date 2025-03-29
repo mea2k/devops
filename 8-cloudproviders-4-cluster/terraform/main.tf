@@ -215,7 +215,6 @@ resource "yandex_kubernetes_cluster" "regional_cluster" {
   name        = var.k8s_cluster_name
   description = "Regional Kubernetes cluster"
   network_id  = yandex_vpc_network.vpc.id
-
   master {
     dynamic "master_location" {
       for_each = yandex_vpc_subnet.public
@@ -225,6 +224,8 @@ resource "yandex_kubernetes_cluster" "regional_cluster" {
       }
     }
     security_group_ids = [yandex_vpc_security_group.k8s_sg.id]
+    # для доступа снаружи ко всем мастерам
+    public_ip = true
 
     maintenance_policy {
       auto_upgrade = true
@@ -306,127 +307,89 @@ resource "yandex_kubernetes_node_group" "node_group" {
   depends_on = [yandex_kubernetes_cluster.regional_cluster]
 }
 
-
-
-
-# # 10. Настройка kubectl
-# provider "local" {}
-
-# resource "local_file" "kubeconfig" {
-#   filename = "${path.module}/kubeconfig.yaml"
-#   content = templatefile("${path.module}/kubeconfig.tpl", {
-#     endpoint       = yandex_kubernetes_cluster.regional_cluster.master[0].external_v4_endpoint
-#     cluster_ca     = base64encode(yandex_kubernetes_cluster.regional_cluster.master[0].cluster_ca_certificate)
-#     k8s_cluster_id = yandex_kubernetes_cluster.regional_cluster.id
-#   })
-
-# }
-
-# provider "kubernetes" {
-#   config_path = "${path.module}/kubeconfig.yaml"
-
-# }
+#######################################
+# KUBECTL - НАСТРОЙКА ДОСТУПА К КЛАСТЕРУ
+#######################################
+## Создание конфигурационного файла
+## из шаблона kubeconfig.tpl
+resource "local_file" "kubeconfig" {
+  filename = "${path.module}/../kubeconfig.yaml"
+  content = templatefile("${path.module}/../kubernetes/kubeconfig.tpl", {
+    endpoint       = yandex_kubernetes_cluster.regional_cluster.master[0].external_v4_endpoint
+    cluster_ca     = base64encode(yandex_kubernetes_cluster.regional_cluster.master[0].cluster_ca_certificate)
+    k8s_cluster_id = yandex_kubernetes_cluster.regional_cluster.id
+  })
+}
 
 # resource "time_sleep" "wait_for_cluster" {
 #   create_duration = "300s" # Увеличено время ожидания
 #   depends_on      = [yandex_kubernetes_cluster.regional_cluster]
 # }
 
+#######################################
+# KUBECTL - PHPMYADMIN
+#######################################
+## Deployment phpMyAdmin
+resource "kubernetes_deployment" "phpmyadmin" {
+  depends_on = [
+    #time_sleep.wait_for_cluster,
+    yandex_mdb_mysql_cluster.mysql_cluster,
+    yandex_kubernetes_node_group.node_group[0]
+  ]
+  metadata {
+    name = "phpmyadmin"
+    labels = {
+      app = "phpmyadmin"
+    }
+  }
+  spec {
+    replicas = 1
+    selector {
+      match_labels = {
+        app = "phpmyadmin"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          app = "phpmyadmin"
+        }
+      }
+      spec {
+        container {
+          name  = "phpmyadmin"
+          image = "phpmyadmin/phpmyadmin:latest"
+          port {
+            container_port = 80
+          }
+          env {
+            name  = "PMA_HOST"
+            value = yandex_mdb_mysql_cluster.mysql_cluster.host[0].fqdn
+          }
+          env {
+            name  = "PMA_PORT"
+            value = "3306"
+          }
+        }
+      }
+    }
+  }
+}
 
-
-
-
-
-
-# # 11. Приложение phpMyAdmin
-# resource "kubernetes_deployment" "phpmyadmin" {
-#   depends_on = [
-#     time_sleep.wait_for_cluster,
-#     yandex_mdb_mysql_cluster.mysql_cluster
-#   ]
-
-#   metadata {
-#     name = "phpmyadmin"
-#     labels = {
-#       app = "phpmyadmin"
-#     }
-#   }
-
-#   spec {
-#     replicas = 1
-
-#     selector {
-#       match_labels = {
-#         app = "phpmyadmin"
-#       }
-#     }
-
-#     template {
-#       metadata {
-#         labels = {
-#           app = "phpmyadmin"
-#         }
-#       }
-
-#       spec {
-#         container {
-#           name  = "phpmyadmin"
-#           image = "phpmyadmin/phpmyadmin:latest"
-#           port {
-#             container_port = 80
-#           }
-#           env {
-#             name  = "PMA_HOST"
-#             value = yandex_mdb_mysql_cluster.mysql_cluster.host.0.fqdn
-#           }
-#           env {
-#             name  = "PMA_PORT"
-#             value = "3306"
-#           }
-#         }
-#       }
-#     }
-#   }
-# }
-
-# resource "kubernetes_service" "phpmyadmin" {
-#   metadata {
-#     name = "phpmyadmin-service"
-#   }
-
-#   spec {
-#     selector = {
-#       app = kubernetes_deployment.phpmyadmin.metadata[0].labels.app
-#     }
-#     port {
-#       port        = 80
-#       target_port = 80
-#     }
-#     type = "LoadBalancer"
-#   }
-
-#   depends_on = [kubernetes_deployment.phpmyadmin]
-# }
-
-
-
-
-
-
-# # 1. Создание KMS-ключа для бакета
-# resource "yandex_kms_symmetric_key" "bucket_key" {
-#   name              = "bucket-encryption-key"
-#   description       = "KMS key for encrypting bucket content"
-#   default_algorithm = "AES_256"
-#   rotation_period   = "8760h" # 365 дней
-# }
-
-# # 2. Создание статического ключа доступа
-# resource "yandex_iam_service_account_static_access_key" "sa-static-key" {
-#   service_account_id = var.service_account_id
-#   description        = "static access key for object storage"
-# }
-
-
-
-
+## Service phpMyAdmin
+resource "kubernetes_service" "phpmyadmin" {
+  metadata {
+    name = "phpmyadmin-service"
+  }
+  spec {
+    selector = {
+      app = kubernetes_deployment.phpmyadmin.metadata[0].labels.app
+    }
+    port {
+      port        = 80
+      target_port = 80
+    }
+    type = "LoadBalancer"
+  }
+  depends_on = [kubernetes_deployment.phpmyadmin]
+}
