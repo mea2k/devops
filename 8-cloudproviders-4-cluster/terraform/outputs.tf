@@ -1,10 +1,16 @@
-output "Private" {
+output "Public" {
   value = [for s in yandex_vpc_subnet.public : {
     network = "${s.name}-${s.zone} [${s.v4_cidr_blocks[0]}]",
   }]
 }
 
-output "Kubernetes_Nodegroups" {
+output "Private" {
+  value = [for s in yandex_vpc_subnet.private : {
+    network = "${s.name}-${s.zone} [${s.v4_cidr_blocks[0]}]",
+  }]
+}
+
+output "Kubernetes_Nodegroups_status" {
   value = yandex_kubernetes_node_group.node_group.*.status
 }
 
