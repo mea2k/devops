@@ -186,7 +186,7 @@ resource "yandex_vpc_security_group" "k8s_sg" {
   ingress {
     protocol       = "ANY"
     description    = "Правило разрешает взаимодействие под-под и сервис-сервис. Укажите подсети вашего кластера Managed Service for Kubernetes и сервисов."
-    v4_cidr_blocks = var.subnet_public_cidr
+    v4_cidr_blocks = ["0.0.0.0/0"] #var.subnet_public_cidr
     from_port      = 0
     to_port        = 65535
   }
@@ -313,7 +313,7 @@ resource "yandex_kubernetes_node_group" "node_group" {
 ## Создание конфигурационного файла
 ## из шаблона kubeconfig.tpl
 resource "local_file" "kubeconfig" {
-  filename = "${path.module}/../kubeconfig.yaml"
+  filename = "${path.module}/../kubernetes/kubeconfig.yaml"
   content = templatefile("${path.module}/../kubernetes/kubeconfig.tpl", {
     endpoint       = yandex_kubernetes_cluster.regional_cluster.master[0].external_v4_endpoint
     cluster_ca     = base64encode(yandex_kubernetes_cluster.regional_cluster.master[0].cluster_ca_certificate)

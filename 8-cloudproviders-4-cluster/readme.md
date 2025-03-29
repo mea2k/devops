@@ -118,12 +118,17 @@ __Результаты:__
     ![Созданные группы узлов](images/k8s-node-groups-01.png)
 
 
-3. Подключение к Kubernetes-кластеру
+    Доступ к приложению `phpmyadmin` с БД 'netology_db':
+
+    ![Приложение phpmyadmin](images/phpmyadmin-01.png)
+
+
+3. Подключение к Kubernetes-кластеру _( *альтернативный сценарий)_
 
     1. Добавление контекста нового кластера
 
         ```
-        yc managed-kubernetes cluster get-credentials --name k8s-regional-cluster --internal
+        yc managed-kubernetes cluster get-credentials --name k8s-regional-cluster --external
         ```
     
     2. Просмотр доступных контекстов и выбор контекста по умолчанию
