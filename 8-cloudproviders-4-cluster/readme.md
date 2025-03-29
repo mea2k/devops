@@ -97,7 +97,7 @@ __Результаты:__
 
     MySQL-кластер:
 
-    ![Созданные ВМ](images/vms-01.png)
+    ![Созданны MySQL-кластер ВМ](images/mysql-cluster-01.png)
 
     Kuberneytes-кластер:
 
