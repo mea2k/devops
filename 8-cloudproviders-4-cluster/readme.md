@@ -138,10 +138,39 @@ __Результаты:__
         kubectl config use-context yc-k8s-regional-cluster
         ```
 
-        ![Доступные контексты кластера](images/kunectl-context-01.png)
+        ![Доступные контексты кластера](images/kubectl-context-01.png)
 
 
-      
+    3. Проверка корректности подключения к кластеру
+
+        ```
+        kubectl get nodes
+        ```
+
+        ![Имеющиеся узлы в кластере](images/kubectl-nodes-01.png)
+     
+
+    4. Развертывание приложения `phpmyadmin` из файла [kubernetes/deployment.yaml](kubernetes/deployment.yaml)
+
+        ```
+        kubectl apply -f kubernetes/deployment.yaml
+        kubectl get po
+        ```
+
+        ![Запуск приложения в кластере вручную](images/kubectl-deployment-01.png)
+
+    4. Развертывание сервиса, позволяющего обратиться к приложению снаружи (тип сервиса `LoadBalancer`) из файла [kubernetes/service.yaml](kubernetes/service.yaml)
+
+        ```
+        kubectl apply -f kubernetes/service.yaml
+        kubectl get svc
+        ```
+
+        ![Запуск сервиса приложения phpmyadmin](images/kubectl-service-01.png)
+
+    5. Проверка корректной работы сервиса
+
+    
 
 
 ------
